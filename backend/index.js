@@ -1,10 +1,12 @@
 const serverConfig = require("./config/server.config")
 const db = require("./models")
+const cors = require("cors")
 const express = require("express");
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
+app.use(cors())
 
 db.sequelize.sync({alter:true}).then(() =>{
     console.log("sync successfully");
