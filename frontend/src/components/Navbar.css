@@ -1,0 +1,22 @@
+.bg-body-tertiary{
+    background-color: rgb(206, 103, 103) !important;
+}
+
+a{
+    color: aliceblue !important;
+}
+
+.dropdown-menu li a{
+    color:rgb(206, 103, 103) !important;
+}
+
+.dropdown-menu li a:hover{
+    background-color: rgb(206, 103, 103);
+    color: aliceblue !important;
+}
+
+button{
+    background-color: aliceblue !important;
+    color: rgb(206, 103, 103) !important;
+    font-weight: bold !important;
+}

@@ -1,0 +1,15 @@
+.container-xxl {
+    background-color: rgb(249, 173, 173);
+}
+
+.custom {
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(249, 173, 173);
+    box-shadow: lightgray;
+    margin: 5px;
+    border-radius: 5px;
+}
+
+.row {
+    justify-content: center;
+}

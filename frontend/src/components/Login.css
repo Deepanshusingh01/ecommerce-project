@@ -1,0 +1,47 @@
+.container-sm {
+    margin-top: 20px;
+    border: solid 1px lightgray;
+    border-radius: 5px;
+    max-width: 400px;
+    padding: 20px;
+}
+
+.required:after {
+    content:" *";
+    color: red;
+}
+
+.create-account-label {
+    color: rgb(206, 103, 103);
+    cursor: pointer;
+}
+
+.btn-primary{
+    background-color: rgb(206, 103, 103);
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover{
+    background-color: rgb(232, 79, 79);
+}
+
+.required {
+    color: rgb(206, 103, 103);
+}
+
+.label-password {
+    color:rgb(206, 103, 103);
+    margin-left: 5px;
+    font-size: small;
+}
+
+.password-checkbox:checked {
+    accent-color: rgb(206, 103, 103);
+}
+
+.form-control:focus {
+    outline: none !important;
+    border: 2px solid rgb(206, 103, 103);
+    box-shadow: 0 0 10px #719ECE;
+}
