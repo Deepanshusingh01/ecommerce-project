@@ -14,8 +14,8 @@ db.sequelize.sync({alter:true}).then(() =>{
     console.log(err.message);
 })
 
-require("./route/user.route")(app);
 require("./route/product.route")(app);
+require("./route/user.route")(app);
 require("./route/cart.route")(app);
 
 app.listen(serverConfig.PORT,()=>{
