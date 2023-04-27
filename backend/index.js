@@ -14,9 +14,14 @@ db.sequelize.sync({alter:true}).then(() =>{
     console.log(err.message);
 })
 
-require("./route/product.route")(app);
-require("./route/user.route")(app);
-require("./route/cart.route")(app);
+const productRoute = require("./route/product.route");
+const userRoute = require("./route/user.route");
+const cartRoute = require("./route/cart.route")
+
+
+app.use(productRoute);
+app.use(userRoute)
+app.use(cartRoute)
 
 app.listen(serverConfig.PORT,()=>{
     console.log("Server started at Port :",serverConfig.PORT)
