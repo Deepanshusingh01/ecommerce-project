@@ -20,8 +20,8 @@ const cartRoute = require("./route/cart.route")
 
 
 app.use(productRoute);
-app.use(userRoute)
 app.use(cartRoute)
+app.use(userRoute)
 
 app.listen(serverConfig.PORT,()=>{
     console.log("Server started at Port :",serverConfig.PORT)

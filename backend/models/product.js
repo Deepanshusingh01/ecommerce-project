@@ -23,6 +23,10 @@ module.exports = (sequelize,Sequelize) =>{
         rating:{
             type : Sequelize.INTEGER,
             allownull : false
+        },
+        image:{
+            type : Sequelize.STRING,
+            allownull : true
         }
     })
     return Product;
