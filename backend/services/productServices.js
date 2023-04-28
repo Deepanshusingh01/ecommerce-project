@@ -1,6 +1,6 @@
 const db = require("../models");
 const Product = db.product;
-const Op = db.Sequelize.Op
+const Op = require("sequelize").Op
 
 module.exports = {
 
@@ -13,7 +13,7 @@ module.exports = {
             where: {
                 [Op.or]:[
                     { productName : { [Op.like]: `%${searchTerm}%`}},
-                    { description : {[Op.like] : `%${searchTerm}`}}
+                    { description : {[Op.like] : `%${searchTerm}%`}}
                 ]
             }
         })

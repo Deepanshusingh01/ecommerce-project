@@ -47,15 +47,12 @@ exports.signin = async (req,res) =>{
             const token = jwt.sign({id:user.userId},config.SECRET,{expiresIn:6000})
             const response = {
                 userId : user.userId,
-                name  : user.name,
-                email : user.email,
-                phoneNo: user.phoneNo,
                 accessToken : token
             }
             return res.status(200).send(response)
         }else{
             return res.status(400).send({
-                mesg : "Wrong Password"
+                mesg : "Email or Password may be wrong"
             })
         }
     }
