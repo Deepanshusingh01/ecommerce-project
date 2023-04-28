@@ -6,12 +6,11 @@ exports.addProduct = async(req,res) =>{
 
     try{
 
-    const {productName,price,description,rating} = req.body
+    const {productName,price,description} = req.body
     const product = await Product.create({
         productName,
         description,
         price,
-        rating,
         image:req.file.filename
     }) 
 

@@ -20,14 +20,10 @@ const Product = sequelize.define("product", {
     type: Sequelize.STRING,
     allownull: false,
   },
-  rating: {
-    type: Sequelize.INTEGER,
-    allownull: false,
-  },
   image: {
     type: Sequelize.STRING,
     allownull: true,
-  },
+  }
 });
 
 module.exports = Product
