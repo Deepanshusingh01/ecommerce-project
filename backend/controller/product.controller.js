@@ -1,6 +1,7 @@
 const db = require("../models");
 const Product = db.product;
 const productService = require("../services/productServices")
+const Op = require("sequelize").Op;
 
 exports.addProduct = async(req,res) =>{
 
@@ -26,8 +27,24 @@ exports.addProduct = async(req,res) =>{
 exports.allProducts = async(req,res) =>{
 
     try{
-    const product  = await productService.findAllProducts();
-    return res.status(200).send(product)
+
+    const {search} = req.query
+    
+    let query;
+    if(search){
+        query = await productService.findAllProducts({
+            where:{
+                [Op.or]:[
+                    {productName:{[Op.like]:`%${search}%`}},
+                    {description:{[Op.like]:`%${search}%`}}
+                ]
+            }
+        })
+    }
+    if(!search){
+        query = await productService.findAllProducts()
+    }
+    return res.status(200).send(query)
     }catch(err){
         console.log("Error while finding all product",err);
         return res.status(500).send({
@@ -36,14 +53,17 @@ exports.allProducts = async(req,res) =>{
     }
 }
 
-exports.searchProduct = async (req,res) =>{
+
+
+exports.findByPk = async (req,res) =>{
 
     try{
-    const search = req.params.key
-    const product = await productService.findProductBySearch(search)
+    const productId = req.params.id
+    const product = await productService.findProductByPk(productId);
+
     return res.status(200).send(product)
     }catch(err){
-        console.log("Error while searching product by words",err);
+        console.log("Error while finding product by productId",err);
         return res.status(500).send({
             mesg : "Internal server error"
         })
