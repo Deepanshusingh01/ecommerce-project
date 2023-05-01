@@ -26,6 +26,10 @@
     background-color: rgb(232, 79, 79);
 }
 
+.btn-primary:active{
+    background-color: rgb(232, 79, 79) !important;
+}
+
 .required {
     color: rgb(206, 103, 103);
 }

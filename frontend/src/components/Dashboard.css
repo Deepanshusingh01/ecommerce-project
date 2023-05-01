@@ -1,15 +1,51 @@
+.card {
+    display: flex;
+    flex-direction: row;
+    margin: 10px;
+    padding: 10px;
+}
+
+.card-img-top{
+    width: 250px;
+    height: 250px;
+}
+
 .container-xxl {
-    background-color: rgb(249, 173, 173);
+    width: 70rem;
+    margin: auto;
 }
 
-.custom {
-    background-color: rgb(255, 255, 255);
-    border: 1px solid rgb(249, 173, 173);
-    box-shadow: lightgray;
-    margin: 5px;
-    border-radius: 5px;
+.card-title {
+    color: rgb(206, 103, 103);
 }
 
-.row {
-    justify-content: center;
+.card-body {
+    margin-left: 50px;
+}
+
+.add-to-cart {
+    margin-top: 10px;
+}
+
+.quantity-div{
+    display: flex;
+    text-align: center;
+}
+
+.quantity {
+    width: 40px;
+    height: 40px;
+    border: lightgray 1px solid;
+    text-align: center;
+    padding: 7px;
+    display: inline;
+}
+
+.add-to-cart:active {
+    background-color: rgb(232, 79, 79) !important;
+}
+
+.rupees {
+    color: rgb(206, 103, 103);
+    margin-top: 5px;
 }

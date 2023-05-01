@@ -15,8 +15,54 @@ a{
     color: aliceblue !important;
 }
 
-button{
+.btn-outline-success {
     background-color: aliceblue !important;
     color: rgb(206, 103, 103) !important;
     font-weight: bold !important;
+    border: none;
+    border-radius: 15px;
+}
+
+.btn-outline-success:hover{
+    border: none;
+}
+
+.btn-outline-success:active{
+    border: none;
+}
+
+.cart {
+    margin: 5px;
+    color:white;
+    cursor: pointer;
+}
+.dropdown-label {
+    list-style-type:"none";
+    margin-left: 10;
+    background-color: white;
+    color: #CE6767 !important;
+    border-radius: 5;
+}
+
+.form-control:focus {
+    box-shadow: 1px 1px 1px 1px white;
+}
+
+.form-control {
+    border-radius: 15px;
+}
+
+.user-btn {
+    background-color: #CE6767 !important;
+    color: white !important;
+    border: white solid 1px;
+}
+
+.user-btn:hover {
+    background-color: rgb(232, 79, 79) !important;
+    border: white solid 1px;
+}
+
+.user-btn:active {
+    border: white solid 1px !important;
 }

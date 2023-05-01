@@ -1,0 +1,39 @@
+.cart-component {
+    border: lightgrey 1px solid;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+.cart-description {
+    display: inline;
+    margin-left: 10px;
+    color: rgb(206, 103, 103);
+}
+
+.cart-icon {
+    color: rgb(206, 103, 103);
+}
+
+.container-md {
+    margin-top: 10px;
+}
+
+.cart-back-button:active {
+    background-color: rgb(232, 79, 79) !important;
+}
+
+.back-button-div {
+    margin-top: 10px !important;
+}
+
+.cart-component {
+    margin-top: 20px !important;
+    width: 70rem;
+    margin: auto;
+}
+
+.container-md {
+    text-align: left;
+}
