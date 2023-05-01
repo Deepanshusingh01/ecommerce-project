@@ -1,8 +1,15 @@
 
-const Cart = require("./cart")
-const User = require("./user")
-const Product = require("./product")
+const cart = require("./cart")
+const user = require("./user")
+const product = require("./product")
 
 //---------------Association between models ---------------
-User.hasMany(Cart,{foreignKey:"userId"});
-Cart.belongsTo(Product,{foreignKey:"productId"})
+user.hasMany(cart,{foreignKey:"userId"});
+cart.belongsTo(product,{foreignKey:"productId"})
+
+
+module.exports = {
+    cart,
+    user,
+    product
+}
