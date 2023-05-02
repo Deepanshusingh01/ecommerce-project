@@ -7,7 +7,7 @@ module.exports = {
       productName : "M1 A4",
       description : "This is an new phone of mi series",
       price : 15000,
-      rating : 4 ,
+      image:"file-1682601688141.jpg",
       createdAt : new Date(),
       updatedAt : new Date()
    },
@@ -15,7 +15,6 @@ module.exports = {
     productName : "apple",
     description : "This belongs to phone",
     price : 250000,
-    rating : 5,
     createdAt : new Date(),
     updatedAt : new Date()
  },
