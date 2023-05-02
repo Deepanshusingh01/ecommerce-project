@@ -24,13 +24,17 @@ exports.addProduct = async(req,res) =>{
 }
 }
 
+
 exports.allProducts = async(req,res) =>{
 
     try{
 
-    const {search} = req.query
-    
+    let {limit,page,search} = req.query
+    limit = parseInt(limit) || 10 ;
+    page = parseInt(page) || 1
+    let offset = page * limit - limit
     let query;
+    let count;
     if(search){
         query = await productService.findAllProducts({
             where:{
@@ -38,13 +42,34 @@ exports.allProducts = async(req,res) =>{
                     {productName:{[Op.like]:`%${search}%`}},
                     {description:{[Op.like]:`%${search}%`}}
                 ]
-            }
+            },
+            offset:offset,
+            limit : limit,
+            order :[["createdAt","DESC"]]
+
+        })
+        count = await Product.count({
+            where:{
+                [Op.or]:[
+                    {productName:{[Op.like]:`%${search}%`}},
+                    {description:{[Op.like]:`%${search}%`}}
+                ]
+            },
+            offset:offset,
+            limit : limit,
+            order :[["createdAt","DESC"]]
         })
     }
     if(!search){
-        query = await productService.findAllProducts()
+        query = await productService.findAllProducts({
+            limit : limit,
+            page : page,
+            offset : offset,
+            order : [["createdAt","DESC"]]
+        })
+        count = await Product.count()
     }
-    return res.status(200).send(query)
+    return res.status(200).send({product:query,pagination:{count,limit,page,search}})
     }catch(err){
         console.log("Error while finding all product",err);
         return res.status(500).send({

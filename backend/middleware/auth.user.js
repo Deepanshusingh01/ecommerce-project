@@ -6,6 +6,12 @@ function validEmail(e) {
     return String(e).search (filter) != -1;
 }
 
+function checkPassword(str)
+{
+    var re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+    return re.test(str);
+}
+
 const verifyUserSignup = async(req,res,next) =>{
 
     if(!req.body.name){
@@ -38,6 +44,10 @@ const verifyUserSignup = async(req,res,next) =>{
     if(!req.body.password){
         return res.status(400).send({
             mesg : "Password is not provided"
+        })
+    }else if(!checkPassword(req.body.password)){
+        return res.status(200).send({
+            mesg : "Password should be minimum 8 letters long, with at least a symbol, upper and lower case letters and a number"
         })
     }
 
