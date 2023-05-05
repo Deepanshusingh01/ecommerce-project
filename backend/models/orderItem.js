@@ -1,24 +1,32 @@
 'use strict';
+
 const {Model,DataTypes} = require('sequelize');
 const sequelize = require("../config/db");
 
   class OrderItem extends Model {}
 
   OrderItem.init({
-    orderId: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER
-    },
     productId: {
       type: DataTypes.INTEGER
     },
-    productPrice: {
-      type: DataTypes.FLOAT
+    productName : {
+      type : DataTypes.STRING,
+      allownull : false
     },
-    Quantity: {
-      type: DataTypes.FLOAT
+    productPrice: {
+      type: DataTypes.INTEGER,
+      allownull: false
+    },
+    quantity: {
+      type: DataTypes.INTEGER,
+      allownull : false
+    },
+    image :{
+      type : DataTypes.STRING,
+      allownull: true
+    },
+    orderId: {
+      type: DataTypes.INTEGER
     },
   },{
     sequelize,

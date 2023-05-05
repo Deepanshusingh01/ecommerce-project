@@ -94,3 +94,4 @@ exports.findByPk = async (req,res) =>{
         })
     }
 }
+

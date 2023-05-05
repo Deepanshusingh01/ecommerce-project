@@ -9,11 +9,11 @@ const Product = sequelize.define("product", {
     autoIncrement: true,
   },
   productName: {
-    type: Sequelize.STRING(50),
+    type: Sequelize.STRING,
     allownull: false,
   },
   price: {
-    type: Sequelize.FLOAT,
+    type: Sequelize.INTEGER,
     allownull: false,
   },
   description: {
