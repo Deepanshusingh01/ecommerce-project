@@ -47,6 +47,7 @@ exports.signin = async (req,res) =>{
             const token = jwt.sign({id:user.userId},config.SECRET,{expiresIn:6000})
             const response = {
                 userId : user.userId,
+                name : user.name,
                 accessToken : token
             }
             return res.status(200).send(response)

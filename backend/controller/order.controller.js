@@ -1,20 +1,33 @@
 const orderService = require("../services/orderService");
 const stripe = require("../payment/stripe");
+
 const { cart, orderDetail } = require("../models");
+
+
+
+// const stripePaymentIntent = async()=>{
+//   const paymentIntent = await stripe.paymentIntents.create({
+//     amount : 100,
+//     currency : "inr",
+//     payment_method_types : ['card'],
+//     payment_method : 'pm_card_visa'
+//   })
+//   const clientSecret = paymentIntent.client_secret;
+// }
 
 const stripeWebHook = async (req, res) => {
   let event;
   try {
-    let endPointSecret ="whsec_32e93f7afb3f6c965bf589c6e73abb8114378f49efac5d1991fda4e36037e925";
+    let endPointSecret =
+      "whsec_32e93f7afb3f6c965bf589c6e73abb8114378f49efac5d1991fda4e36037e925";
     const signature = req.headers["stripe-signature"];
     event = stripe.webhooks.constructEvent(req.body, signature, endPointSecret);
-console.log(req.body,"req,b0dy----------------------------------")
-  }catch (err) {
-  console.log("Error while calling webhook", err);
-  return res.status(500).send({
-    mesg: "Internal server error",
-  });
-}
+  } catch (err) {
+    console.log("Error while calling webhook", err);
+    return res.status(500).send({
+      mesg: "Internal server error",
+    });
+  }
 
   switch (event.type) {
     case "customer.created": {
@@ -37,7 +50,7 @@ console.log(req.body,"req,b0dy----------------------------------")
     case "checkout.session.completed": {
       const session = event.data.object;
       const customer = await stripe.customers.retrieve(session.customer);
-      await orderService.updateOrderPaymentStatus(session, "CONFIRMED");
+      await orderService.updateOrderBySession(session);
       await cart.destroy({ where: { userId: customer.metadata.userId } });
       console.log("checkout.session.completed", session);
       break;
@@ -52,21 +65,20 @@ console.log(req.body,"req,b0dy----------------------------------")
       }
       console.log("checkout.session.expired", session);
       break;
-    }case "payment_intent.requires_action": {
-      const paymentIntent = event.data.object;
-      const clientSecret = paymentIntent.client_secret;
-      if (paymentIntent.next_action.type === "use_stripe_sdk") {
-        const { type, use_stripe_sdk: useStripeSdk } = paymentIntent.next_action;
-        if (type === "three_d_secure_redirect") {
-          const stripeJsUrl = useStripeSdk.stripe_js;
-          const sourceUrl = useStripeSdk.source;
-          res.redirect(stripeJsUrl);
-        }
-      }
-      console.log("payment_intent.requires_action",paymentIntent)
-      break;
     }
-
+    // case "payment_intent.requires_action": {
+    //   const paymentIntentId = event.data.object.id;
+    //   const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+    //   if (paymentIntent.status == "requires_action" && paymentIntent.next_action.type == "use_stripe_sdk"){
+    //     console.log(paymentIntent.next_action.use_stripe_sdk.stripe_js)
+    //     return res.json(paymentIntent.next_action.use_stripe_sdk.stripe_js)
+    //   }
+    //   break;
+    // }
+    case "charge.succeeded":{
+      const session = event.data.object;
+      console.log(session.receipt_url,"PaymentReceipt------url")
+    }
     default:
       console.log(`unhandle event type ${event.type}`);
   }
@@ -74,6 +86,7 @@ console.log(req.body,"req,b0dy----------------------------------")
     mesg: "sucessful",
   });
 };
+
 
 const checkOutSession = async (req, res) => {
   try {
@@ -101,7 +114,7 @@ const checkOutSession = async (req, res) => {
               price: item.productPrice,
             },
           },
-          unit_amount: Math.floor(item.productPrice * 100),
+          unit_amount: item.productPrice * 100,
         },
         quantity: item.quantity,
       };
@@ -127,6 +140,7 @@ const checkOutSession = async (req, res) => {
     await orderDetails.update({ stripeSessionId: session.id });
     return res.status(200).send({
       mesg: "successfully created checkout session",
+      url : session.url
     });
   } catch (err) {
     console.log("Error while creating checkout session", err);

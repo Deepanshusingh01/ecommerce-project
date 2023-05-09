@@ -27,7 +27,7 @@ const sequelize = require("../config/db")
       allowNull : false
     },
     orderStatus: {
-      type: DataTypes.ENUM("SHIPPED","CANCELLED","PENDING","REJECTED","PROCESSING","DELIVERED","FAILED"),
+      type: DataTypes.ENUM("SHIPPED","CANCELLED","PENDING","REJECTED","PROCESSING","DELIVERED","FAILED","CONFIRMED"),
       defaultValue : "PENDING"
     },
     userName: {

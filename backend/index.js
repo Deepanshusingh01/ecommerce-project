@@ -3,14 +3,12 @@ const app = express();
 const serverConfig = require("./config/server.config");
 const sequelize = require("./config/db")
 const cors = require("cors")
+app.use(cors());
 
 const orderController = require("./controller/order.controller")
-app.post("/webhook",express.raw({ type: 'application/json' }),orderController.stripeWebHook)
-
-
+app.post("/stripe/webhook",express.raw({ type: 'application/json' }),orderController.stripeWebHook)
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
-app.use(cors())
 
 sequelize.sync({alter:true}).then(() =>{
     console.log("sync successfully");
