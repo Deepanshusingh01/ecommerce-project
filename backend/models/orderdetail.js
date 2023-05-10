@@ -1,6 +1,6 @@
 'use strict';
 const {DataTypes,Model} = require('sequelize');
-const sequelize = require("../config/db")
+const sequelize = require('../config/db')
 
   class OrderDetail extends Model {}
   OrderDetail.init({
@@ -27,8 +27,8 @@ const sequelize = require("../config/db")
       allowNull : false
     },
     orderStatus: {
-      type: DataTypes.ENUM("SHIPPED","CANCELLED","PENDING","REJECTED","PROCESSING","DELIVERED","FAILED","CONFIRMED"),
-      defaultValue : "PENDING"
+      type: DataTypes.ENUM('SHIPPED','CANCELLED','PENDING','REJECTED','PROCESSING','DELIVERED','FAILED','CONFIRMED'),
+      defaultValue : 'PENDING'
     },
     userName: {
       type: DataTypes.STRING(50),

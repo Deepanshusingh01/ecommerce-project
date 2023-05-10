@@ -1,4 +1,4 @@
-const {cart,orderDetail,orderItem,product,user} = require("../models");
+const {cart,orderDetail,orderItem,product,user} = require('../models');
 
 
 
@@ -63,11 +63,11 @@ const updateOrderBySession = async(session) =>{
         shippingState : address.state,
         shippingCity : address.city,
         shippingPincode : address.postal_code,
-        shippingLandMark : ""
+        shippingLandMark : ''
     }
     let orderStatus;
-    if(session.payment_status === "paid"){
-        orderStatus = "CONFIRMED"
+    if(session.payment_status === 'paid'){
+        orderStatus = 'CONFIRMED'
     }
 
     const order = await orderDetail.findOne({where:{stripeSessionId:session.id}})

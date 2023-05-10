@@ -1,7 +1,7 @@
-const Sequelize = require("sequelize");
-const sequelize = require("../config/db");
+const Sequelize = require('sequelize');
+const sequelize = require('../config/db');
 
-const Product = sequelize.define("product", {
+const Product = sequelize.define('product', {
   productId: {
     type: Sequelize.INTEGER,
     allownull: false,
