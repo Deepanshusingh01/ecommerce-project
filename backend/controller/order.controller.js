@@ -74,7 +74,7 @@ const stripeWebHook = async (req, res) => {
     //     return res.json(paymentIntent.next_action.use_stripe_sdk.stripe_js)
     //   }
     //   break;
-    // }
+    // }//
     case "charge.succeeded":{
       const session = event.data.object;
       console.log(session.receipt_url,"PaymentReceipt------url")

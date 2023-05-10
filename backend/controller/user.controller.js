@@ -1,9 +1,9 @@
-const db = require("../models");
+const db = require('../models');
 const User = db.user
-const bcrypt = require("bcryptjs")
-const jwt = require("jsonwebtoken")
-const config = require("../config/server.config");
-const userService = require("../services/userServices")
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+const config = require('../config/server.config');
+const userService = require('../services/userServices')
 
 exports.signup = async(req,res) =>{
 
@@ -27,9 +27,9 @@ exports.signup = async(req,res) =>{
 
     return res.status(201).send(response)
 }catch(err){
-    console.log("error while registering new user",err);
+    console.log('error while registering new user',err);
     return res.status(500).send({
-        mesg : "Internal server error"
+        mesg : 'Internal server error'
     })
 }
 }
@@ -53,19 +53,19 @@ exports.signin = async (req,res) =>{
             return res.status(200).send(response)
         }else{
             return res.status(400).send({
-                mesg : "Email or Password may be wrong"
+                mesg : 'Email or Password may be wrong'
             })
         }
     }
     else{
         return res.status(400).send({
-            mesg : "Email does not exist"
+            mesg : 'Email does not exist'
         })
     }
 }catch(err){
-    console.log("Error while user login",err);
+    console.log('Error while user login',err);
     return res.status(500).send({
-        mesg : "Internal server error"
+        mesg : 'Internal server error'
     })
 }
 }
@@ -78,9 +78,9 @@ exports.findAll = async (req,res) =>{
     return res.status(200).send(users)
 
     }catch(err){
-        console.log("Error while finding all users",err);
+        console.log('Error while finding all users',err);
         return res.status(500).send({
-            mesg : "Internal server error"
+            mesg : 'Internal server error'
         })
     }
 }
@@ -94,14 +94,14 @@ exports.findById = async (req,res) =>{
 
     if(!user){
         return res.status(400).send({
-            mesg : "User does not exist"
+            mesg : 'User does not exist'
         })
     }
     return res.status(200).send(user)
 }catch(err){
-    console.log("Error while finding user by userId",err);
+    console.log('Error while finding user by userId',err);
     return res.status(500).send({
-        mesg : "Internal server error"
+        mesg : 'Internal server error'
     })
 }
 }
@@ -113,9 +113,9 @@ exports.updateUser = async(req,res) =>{
     const updatedUser = await userService.updateUserByUserId(req.body,userId);
     return res.status(200).send(updatedUser)
     }catch(err){
-        console.log("Error while updating user by userId",err);
+        console.log('Error while updating user by userId',err);
         return res.status(500).send({
-            mesg : "Internal server error"
+            mesg : 'Internal server error'
         })
     }
 }
