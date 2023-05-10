@@ -1,7 +1,7 @@
-const db = require("../models");
+const db = require('../models');
 const Product = db.product;
-const productService = require("../services/productServices")
-const Op = require("sequelize").Op;
+const productService = require('../services/productServices')
+const Op = require('sequelize').Op;
 
 exports.addProduct = async(req,res) =>{
 
@@ -17,9 +17,9 @@ exports.addProduct = async(req,res) =>{
 
     return res.status(200).send(product)
 }catch(err){
-    console.log("Error while adding new product",err);
+    console.log('Error while adding new product',err);
     return res.status(500).send({
-        mesg : "Internal server error"
+        mesg : 'Internal server error'
     })
 }
 }
@@ -45,7 +45,7 @@ exports.allProducts = async(req,res) =>{
             },
             offset:offset,
             limit : limit,
-            order :[["createdAt","DESC"]]
+            order :[['createdAt','DESC']]
 
         })
         count = await Product.count({
@@ -57,7 +57,7 @@ exports.allProducts = async(req,res) =>{
             },
             offset:offset,
             limit : limit,
-            order :[["createdAt","DESC"]]
+            order :[['createdAt','DESC']]
         })
     }
     if(!search){
@@ -65,15 +65,15 @@ exports.allProducts = async(req,res) =>{
             limit : limit,
             page : page,
             offset : offset,
-            order : [["createdAt","DESC"]]
+            order : [['createdAt','DESC']]
         })
         count = await Product.count()
     }
     return res.status(200).send({product:query,pagination:{count,limit,page,search}})
     }catch(err){
-        console.log("Error while finding all product",err);
+        console.log('Error while finding all product',err);
         return res.status(500).send({
-            mesg : "Internal server error"
+            mesg : 'Internal server error'
         })
     }
 }
@@ -88,9 +88,9 @@ exports.findByPk = async (req,res) =>{
 
     return res.status(200).send(product)
     }catch(err){
-        console.log("Error while finding product by productId",err);
+        console.log('Error while finding product by productId',err);
         return res.status(500).send({
-            mesg : "Internal server error"
+            mesg : 'Internal server error'
         })
     }
 }

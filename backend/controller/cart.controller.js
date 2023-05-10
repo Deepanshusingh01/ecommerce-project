@@ -1,4 +1,4 @@
-const db = require("../models");
+const db = require('../models');
 const Cart = db.cart;
 const Product = db.product;
 
@@ -13,9 +13,9 @@ exports.addCart = async (req, res) => {
     });
     return res.status(201).send(cart);
   } catch (err) {
-    console.log("Error while adding product in cart", err);
+    console.log('Error while adding product in cart', err);
     return res.status(500).send({
-      mesg: "Internal server error",
+      mesg: 'Internal server error',
     });
   }
 };
@@ -31,7 +31,7 @@ exports.getCartProducts = async (req, res) => {
     let totalPrice = 0;
     if (product.length == 0) {
       return res.status(400).send({
-        mesg: "Cart is empty",
+        mesg: 'Cart is empty',
       });
     }
     product.forEach((item) => {
@@ -40,9 +40,9 @@ exports.getCartProducts = async (req, res) => {
     });
     return res.status(200).send({ product: product, totalPrice, totalQuantity });
   } catch (err) {
-    console.log("Error while getting cart products", err);
+    console.log('Error while getting cart products', err);
     return res.status(500).send({
-      mesg: "Internal server error",
+      mesg: 'Internal server error',
     });
   }
 };
@@ -56,13 +56,13 @@ exports.removeCartProducts = async (req, res) => {
         await Cart.destroy({ where: { userId, productId } });
       });
       return res.status(200).send({
-        mesg: "Successfully removed product from cart",
+        mesg: 'Successfully removed product from cart',
       });
     }
   } catch (err) {
-    console.log("Error while removing cart product", err);
+    console.log('Error while removing cart product', err);
     return res.status(500).send({
-      mesg: "Internal server error",
+      mesg: 'Internal server error',
     });
   }
 };
