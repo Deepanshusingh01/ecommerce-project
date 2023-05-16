@@ -1,21 +1,30 @@
-const db = require("../models");
+const db = require('../models');
 const User = db.user;
-
+const nodeCache = require('node-cache')
+let users = null
+const myCache = new nodeCache()
+const cacheKey = 'ecommerceProject'
 
 module.exports = {
 
-    findAllUser:async ()=>{
-        const users = await User.findAll();
+    findAllUser: async() => {
+        let cachedData = myCache.get(cacheKey);
+        if(cachedData) {
+            users = cachedData
+        } else {
+            users = await User.findAll();
+            myCache.set(cacheKey, users, 600)
+        }
         return users;
     },
-    findUserByPk:async (userId)=>{
+    findUserByPk: async(userId) => {
         const user = await User.findByPk(userId)
         return user;
     },
-    updateUserByUserId:async(userData,Id)=>{
-        const updatedUser = await User.update(userData,{
-            where:{userId:Id},
-            returning : true
+    updateUserByUserId: async(userData,Id) => {
+        const updatedUser = await User.update(userData, {
+            where: { userId: Id },
+            returning: true
         })
         return updatedUser;
     }

@@ -23,8 +23,8 @@ module.exports = {
         allowNull : false
       },
       orderStatus: {
-        type: Sequelize.ENUM("SHIPPED","CANCELLED","PENDING","REJECTED","PROCESSING","DELIVERED"),
-        defaultValue : "PENDING"
+        type: Sequelize.ENUM('SHIPPED','CANCELLED','PENDING','REJECTED','PROCESSING','DELIVERED'),
+        defaultValue : 'PENDING'
       },
       userName: {
         type: Sequelize.STRING(50),
@@ -40,7 +40,6 @@ module.exports = {
       },
       shippingAddressLine2: {
         type: Sequelize.STRING,
-        allowNull : true
       },
       shippingCountry: {
         type: Sequelize.STRING(100),

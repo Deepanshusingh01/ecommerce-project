@@ -4,26 +4,26 @@ const sequelize = require("../config/db");
 const Product = sequelize.define("product", {
   productId: {
     type: Sequelize.INTEGER,
-    allownull: false,
+    allowNull: false,
     primaryKey: true,
     autoIncrement: true,
   },
   productName: {
     type: Sequelize.STRING,
-    allownull: false,
+    allowNull: false,
   },
   price: {
     type: Sequelize.INTEGER,
-    allownull: false,
+    allowNull: false,
   },
   description: {
     type: Sequelize.STRING,
-    allownull: false,
+    allowNull: false,
   },
   image: {
     type: Sequelize.STRING,
-    allownull: true,
-  }
+    allowNull: true,
+  },
 });
 
-module.exports = Product
+module.exports = Product;

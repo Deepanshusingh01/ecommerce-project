@@ -1,54 +1,51 @@
-'use strict';
-const {DataTypes,Model} = require('sequelize');
-const sequelize = require("../config/db")
+"use strict";
+const { DataTypes, Model } = require("sequelize");
+const sequelize = require("../config/db");
 
-  class OrderDetail extends Model {}
-  OrderDetail.init({
+class OrderDetail extends Model {}
+OrderDetail.init(
+  {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
     },
     userId: {
       type: DataTypes.INTEGER,
-      allowNull : false
+      allowNull: false,
     },
-    stripeSessionId : {
-      type : DataTypes.STRING,
-      allownull : true
+    stripeSessionId: {
+      type: DataTypes.STRING,
     },
     totalPrice: {
       type: DataTypes.INTEGER,
-      allowNull : false
+      allowNull: false,
     },
     totalQuantity: {
       type: DataTypes.INTEGER,
-      allowNull : false
+      allowNull: false,
     },
     orderStatus: {
-      type: DataTypes.ENUM("SHIPPED","CANCELLED","PENDING","REJECTED","PROCESSING","DELIVERED","FAILED","CONFIRMED"),
-      defaultValue : "PENDING"
+      type: DataTypes.ENUM("SHIPPED", "CANCELLED", "PENDING", "REJECTED", "PROCESSING", "DELIVERED", "FAILED", "CONFIRMED"),
+      defaultValue: "PENDING",
     },
     userName: {
       type: DataTypes.STRING(50),
-      allowNull : false
+      allowNull: false,
     },
     userMobileNo: {
       type: DataTypes.BIGINT,
-      allowNull : false
+      allowNull: false,
     },
     shippingAddressLine1: {
       type: DataTypes.STRING,
-      allowNull : true
     },
     shippingAddressLine2: {
       type: DataTypes.STRING,
-      allowNull : true
     },
     shippingCountry: {
       type: DataTypes.STRING(100),
-      allowNull : true
     },
     shippingState: {
       type: DataTypes.STRING(100),
@@ -57,22 +54,24 @@ const sequelize = require("../config/db")
       type: DataTypes.STRING(100),
     },
     shippingLandMark: {
-      type: DataTypes.STRING(150)
+      type: DataTypes.STRING(150),
     },
     shippingPincode: {
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
     },
     createdAt: {
       allowNull: false,
-      type: DataTypes.DATE
+      type: DataTypes.DATE,
     },
     updatedAt: {
       allowNull: false,
-      type: DataTypes.DATE
-    }
-  }, {
+      type: DataTypes.DATE,
+    },
+  },
+  {
     sequelize,
-    modelName: 'OrderDetail',
-  });
+    modelName: "OrderDetail",
+  }
+);
 
-  module.exports = OrderDetail
+module.exports = OrderDetail;

@@ -1,22 +1,22 @@
-const jwt = require("jsonwebtoken")
-const config = require("../config/server.config")
-const db = require("../models")
+const jwt = require('jsonwebtoken')
+const config = require('../config/server.config')
+const db = require('../models')
 const User = db.user
 
 
 const verifyToken = (req,res,next) =>{
 
-    const token = req.headers["x-access-token"];
+    const token = req.headers['x-access-token'];
 
     if(!token){
         return res.status(403).send({
-            mesg : "Token is not provided"
+            mesg : 'Token is not provided'
         })
     }
     jwt.verify(token,config.SECRET,async(err,decoded) =>{
         if(err){
             return res.status(401).send({
-                mesg : "Unauthorized!"
+                mesg : 'Unauthorized!'
             })
         }
         const user = await User.findOne({where:{userId:decoded.id}})
@@ -26,7 +26,7 @@ const verifyToken = (req,res,next) =>{
 }
 
 const verify = {
-    verifyToken : verifyToken
+    verifyToken 
 }
 
 module.exports = verify

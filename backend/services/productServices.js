@@ -1,4 +1,4 @@
-const db = require("../models");
+const db = require('../models');
 const Product = db.product;
 
 
@@ -14,5 +14,5 @@ const findProductByPk = async (productId) => {
 
 module.exports = {
     findAllProducts,
-    findProductByPk
+    findProductByPk,
 }

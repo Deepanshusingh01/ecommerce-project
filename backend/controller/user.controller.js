@@ -1,121 +1,209 @@
-const db = require("../models");
+const db = require('../models');
 const User = db.user
-const bcrypt = require("bcryptjs")
-const jwt = require("jsonwebtoken")
-const config = require("../config/server.config");
-const userService = require("../services/userServices")
+const ResetToken = db.resetToken
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+const config = require('../config/server.config');
+const userService = require('../services/userServices')
+const { nodeMailer } = require('../utils/nodeMailer')
+const  moment = require('moment')
 
-exports.signup = async(req,res) =>{
+
+exports.signup = async(req, res) =>{
 
     try{
-    const {name,email,phoneNo,password} = req.body;
-    const hashpassword = bcrypt.hashSync(password,2);
+    const { name, email, phoneNo, password } = req.body;
+    const hashpassword = bcrypt.hashSync(password, 2);
 
     const user = await User.create({
         name,
         email,
         phoneNo,
-        password :hashpassword
+        password :hashpassword,
 })
 
     const response = {
-        userId : user.userId,
-        name : user.name,
-        email : user.email,
-        phoneNo : user.phoneNo
+        userId: user.userId,
+        name: user.name,
     }
 
     return res.status(201).send(response)
 }catch(err){
-    console.log("error while registering new user",err);
+    console.log('error while registering new user', err);
     return res.status(500).send({
-        mesg : "Internal server error"
+        mesg: 'Internal server error'
     })
 }
 }
 
 
-exports.signin = async (req,res) =>{
+exports.signin = async (req, res) => {
 
     try{
         
-    const {email,password} = req.body
-    const user = await User.findOne({where:{email}});
-    if(user){
-        const validPassword = bcrypt.compareSync(password,user.password)
-        if(validPassword){
-            const token = jwt.sign({id:user.userId},config.SECRET,{expiresIn:6000})
+    const { email, password } = req.body
+    const user = await User.findOne({ where: { email }});
+    const session = {req}
+    if(user) {
+        const validPassword = bcrypt.compareSync(password, user.password)
+        if(validPassword) {
+            const token = jwt.sign({id: user.userId}, config.SECRET, { expiresIn: 6000 })
             const response = {
-                userId : user.userId,
-                name : user.name,
-                accessToken : token
+                userId: user.userId,
+                name: user.name,
+                email: user.email,
+                phoneNo: user.phoneNo,
+                accessToken: token,
             }
-            return res.status(200).send(response)
-        }else{
+
+            req.session.user = {
+                userId: user.userId
+            }
+            session.views = (session.views || 0) + 1
+            return res.status(200).send({ response, mesg: `You have visited this page ${session.views} times`})
+        } else {
             return res.status(400).send({
-                mesg : "Email or Password may be wrong"
+                mesg: 'Email or Password may be wrong'
             })
         }
-    }
-    else{
+    } else {
         return res.status(400).send({
-            mesg : "Email does not exist"
+            mesg: 'Email does not exist'
         })
     }
 }catch(err){
-    console.log("Error while user login",err);
+    console.log('Error while user login', err);
     return res.status(500).send({
-        mesg : "Internal server error"
+        mesg: 'Internal server error'
     })
 }
 }
 
-exports.findAll = async (req,res) =>{
+
+exports.findAll = async (req, res) => {
 
     try{
-
-    const users = await userService.findAllUser();
-    return res.status(200).send(users)
-
-    }catch(err){
-        console.log("Error while finding all users",err);
+        const users = await userService.findAllUser();
+        return res.status(200).send(users)
+    } catch(err){
+        console.log('Error while finding all users', err);
         return res.status(500).send({
-            mesg : "Internal server error"
+            mesg: 'Internal server error'
         })
     }
 }
 
 
-exports.findById = async (req,res) =>{
+exports.findById = async (req, res) => {
 
     try{
     const userId = req.params.id
     const user = await userService.findUserByPk(userId);
 
-    if(!user){
+    if(!user) {
         return res.status(400).send({
-            mesg : "User does not exist"
+            mesg: 'User does not exist'
         })
     }
     return res.status(200).send(user)
 }catch(err){
-    console.log("Error while finding user by userId",err);
+    console.log('Error while finding user by userId', err);
     return res.status(500).send({
-        mesg : "Internal server error"
+        mesg: 'Internal server error'
     })
 }
 }
 
-exports.updateUser = async(req,res) =>{
+exports.updateUser = async(req, res) => {
 
     try{
     const userId = req.params.id
     const updatedUser = await userService.updateUserByUserId(req.body,userId);
     return res.status(200).send(updatedUser)
     }catch(err){
-        console.log("Error while updating user by userId",err);
+        console.log('Error while updating user by userId', err);
         return res.status(500).send({
-            mesg : "Internal server error"
+            mesg: 'Internal server error'
         })
     }
+}
+
+//when  user logged out
+exports.forgetPassword = async(req,res) =>{
+
+    const { email } = req.body;
+    const { userId } = await User.findOne({ where: { email }})
+    if(userId) {
+        const otp = Math.floor(Math.random() * 9000) + 1000;
+        const reset = await ResetToken.create({
+            userId,
+            otp,
+        })
+        // nodeMailer(email,otp)
+        return res.status(200).send({ mesg: `Use : ${reset.otp} OTP to generate new password sent to this email:${email} using this URl :${'http://localhost:8080/user/reset-password/your-otp/your-userId'} expiresIn : 4 min`})
+    }
+
+}
+
+exports.resetPasswordUsingOtp = async(req, res) => {
+
+    const { otp, userId } = req.params
+    const userDetail = await ResetToken.findOne({ where: { userId, otp }, include: [User]})
+    if(userDetail) {
+        if (moment(userDetail.expires).isBefore(moment())) {
+            await ResetToken.destroy({ where: { userId }})
+            return res.status(400).send({
+                mesg: `OTP ${ userDetail.otp } has expired`
+            })
+          } else {
+            const { password } = req.body
+            if(!password) {
+                return res.status(400).send({
+                    mesg: 'New Password is not provided'
+                })
+            }
+            const hashpassword = bcrypt.hashSync(password,2)
+            await userDetail.user.update({ password: hashpassword });
+            await ResetToken.destroy({ where: { userId }})
+            return res.status(200).send({
+                mesg: 'password is reseted'
+            })
+        }
+    }
+    await ResetToken.destroy({ where: {}})
+    return res.status(400).send({
+        mesg: 'Invalid OTP or User'
+    })
+}
+
+// when user is logged in
+exports.resetPassword = async(req, res) => {
+
+    const user = req.user;
+    const { oldPassword, newPassword } = req.body;
+    if(oldPassword && newPassword){
+        const password = bcrypt.compareSync(oldPassword, user.password)
+        if(!password) {
+            return res.status(400).send({
+                mesg: 'current(old) Password is Wrong'
+            })
+        }
+        const hashpassword = bcrypt.hashSync(newPassword, 2)
+        await user.update({ password: hashpassword })
+        return res.status(200).send({
+            mseg: 'Password Updated'
+        })
+    } else {
+        if(!oldPassword) {
+            return res.status(400).send({
+                mesg: 'Old Password is not Provided'
+            })
+        }
+        if(!newPassword) {
+            return res.status(400).send({
+                mesg: 'New Password is not Provided'
+            })
+        }
+    }
+
 }

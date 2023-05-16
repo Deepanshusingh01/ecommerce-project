@@ -1,97 +1,85 @@
-const orderService = require("../services/orderService");
-const stripe = require("../payment/stripe");
+const orderService = require('../services/orderService');
+const stripe = require('../payment/stripe');
 
-const { cart, orderDetail } = require("../models");
-
-
-
-// const stripePaymentIntent = async()=>{
-//   const paymentIntent = await stripe.paymentIntents.create({
-//     amount : 100,
-//     currency : "inr",
-//     payment_method_types : ['card'],
-//     payment_method : 'pm_card_visa'
-//   })
-//   const clientSecret = paymentIntent.client_secret;
-// }
+const { cart, orderDetail } = require('../models');
 
 const stripeWebHook = async (req, res) => {
   let event;
   try {
     let endPointSecret =
-      "whsec_32e93f7afb3f6c965bf589c6e73abb8114378f49efac5d1991fda4e36037e925";
-    const signature = req.headers["stripe-signature"];
+      'whsec_32e93f7afb3f6c965bf589c6e73abb8114378f49efac5d1991fda4e36037e925';
+    const signature = req.headers['stripe-signature'];
     event = stripe.webhooks.constructEvent(req.body, signature, endPointSecret);
   } catch (err) {
-    console.log("Error while calling webhook", err);
+    console.log('Error while calling webhook', err);
     return res.status(500).send({
-      mesg: "Internal server error",
+      mesg: 'Internal server error',
     });
   }
 
   switch (event.type) {
-    case "customer.created": {
+    case 'customer.created': {
       const session = event.data.object;
-      console.log(session, "customer.created");
+      console.log(session, 'customer.created');
       break;
     }
-    case "payment_intent.succeeded": {
+    case 'payment_intent.succeeded': {
       const session = event.data.object; //paymentIntent
-      console.log("payment_intent.succeeded", session);
-      await orderService.updateOrderPaymentStatus(session, "CONFIRMED");
+      console.log('payment_intent.succeeded', session);
+      await orderService.updateOrderPaymentStatus(session, 'CONFIRMED');
       break;
     }
-    case "payment_intent.payment_failed": {
+    case 'payment_intent.payment_failed': {
       const session = event.data.object;
-      console.log("payment_intent.payment_failed", session);
-      await orderService.updateOrderPaymentStatus(session, "FAILED");
+      console.log('payment_intent.payment_failed', session);
+      await orderService.updateOrderPaymentStatus(session, 'FAILED');
       break;
     }
-    case "checkout.session.completed": {
+    case 'checkout.session.completed': {
       const session = event.data.object;
       const customer = await stripe.customers.retrieve(session.customer);
       await orderService.updateOrderBySession(session);
       await cart.destroy({ where: { userId: customer.metadata.userId } });
-      console.log("checkout.session.completed", session);
+      console.log('checkout.session.completed', session);
       break;
     }
-    case "checkout.session.expired": {
+    case 'checkout.session.expired': {
       const session = event.data.object;
       const order = await orderDetail.findOne({
         where: { stripeSessionId: session.id },
       });
-      if (order && order.orderStatus === "PENDING") {
-        await order.update({ orderStatus: "FAILED" });
+      if (order && order.orderStatus === 'PENDING') {
+        await order.update({ orderStatus: 'FAILED' });
       }
-      console.log("checkout.session.expired", session);
+      console.log('checkout.session.expired', session);
       break;
     }
-    // case "payment_intent.requires_action": {
+    // case 'payment_intent.requires_action': {
     //   const paymentIntentId = event.data.object.id;
     //   const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
-    //   if (paymentIntent.status == "requires_action" && paymentIntent.next_action.type == "use_stripe_sdk"){
+    //   if (paymentIntent.status == 'requires_action' && paymentIntent.next_action.type == 'use_stripe_sdk'){
     //     console.log(paymentIntent.next_action.use_stripe_sdk.stripe_js)
     //     return res.json(paymentIntent.next_action.use_stripe_sdk.stripe_js)
     //   }
     //   break;
-    // }
-    case "charge.succeeded":{
+    // }//
+    case 'charge.succeeded':{
       const session = event.data.object;
-      console.log(session.receipt_url,"PaymentReceipt------url")
+      console.log(session.receipt_url,'PaymentReceipt------url')
     }
     default:
       console.log(`unhandle event type ${event.type}`);
   }
   return res.status(200).send({
-    mesg: "sucessful",
+    mesg: 'sucessful',
   });
 };
 
 
 const checkOutSession = async (req, res) => {
   try {
-    const currency = "inr";
-    const allowedCountryISOCodes = ["IN"];
+    const currency = 'inr';
+    const allowedCountryISOCodes = ['IN'];
     const user = req.user;
     const userId = req.user.userId;
 
@@ -120,18 +108,18 @@ const checkOutSession = async (req, res) => {
       };
     });
 
-    const successUrl = "https://checkout.stripe.com/test/success";
-    const cancelUrl = "https://checkout.stripe.com/test/cancelled";
+    const successUrl = 'https://checkout.stripe.com/test/success';
+    const cancelUrl = 'https://checkout.stripe.com/test/cancelled';
 
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      mode: "payment",
+      payment_method_types: ['card'],
+      mode: 'payment',
       currency: currency,
       line_items: stripeLineItems,
       shipping_address_collection: {
         allowed_countries: allowedCountryISOCodes,
       },
-      expand: ["line_items"],
+      expand: ['line_items'],
       customer: customer.id,
       success_url: successUrl,
       cancel_url: cancelUrl,
@@ -139,13 +127,13 @@ const checkOutSession = async (req, res) => {
 
     await orderDetails.update({ stripeSessionId: session.id });
     return res.status(200).send({
-      mesg: "successfully created checkout session",
+      mesg: 'successfully created checkout session',
       url : session.url
     });
   } catch (err) {
-    console.log("Error while creating checkout session", err);
+    console.log('Error while creating checkout session', err);
     return res.status(400).send({
-      mesg: "Internal server error",
+      mesg: 'Internal server error',
     });
   }
 };
