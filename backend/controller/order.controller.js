@@ -3,18 +3,6 @@ const stripe = require('../payment/stripe');
 
 const { cart, orderDetail } = require('../models');
 
-
-
-// const stripePaymentIntent = async()=>{
-//   const paymentIntent = await stripe.paymentIntents.create({
-//     amount : 100,
-//     currency : 'inr',
-//     payment_method_types : ['card'],
-//     payment_method : 'pm_card_visa'
-//   })
-//   const clientSecret = paymentIntent.client_secret;
-// }
-
 const stripeWebHook = async (req, res) => {
   let event;
   try {

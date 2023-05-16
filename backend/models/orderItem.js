@@ -11,19 +11,19 @@ const sequelize = require('../config/db');
     },
     productName : {
       type : DataTypes.STRING,
-      allownull : false
+      allowNull : false
     },
     productPrice: {
       type: DataTypes.INTEGER,
-      allownull: false
+      allowNull: false
     },
     quantity: {
       type: DataTypes.INTEGER,
-      allownull : false
+      allowNull : false
     },
     image :{
       type : DataTypes.STRING,
-      allownull: true
+      allowNull: true
     },
     orderId: {
       type: DataTypes.INTEGER

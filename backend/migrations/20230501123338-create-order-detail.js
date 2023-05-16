@@ -40,7 +40,6 @@ module.exports = {
       },
       shippingAddressLine2: {
         type: Sequelize.STRING,
-        allowNull : true
       },
       shippingCountry: {
         type: Sequelize.STRING(100),

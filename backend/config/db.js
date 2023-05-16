@@ -9,9 +9,13 @@ const sequelize = new Sequelize(
     Config.username,
     Config.password,
     {
-        host:Config.host,
-        dialect : Config.dialect
+        ...Config,
+        logging:false
     }
+    // {
+    //     host:Config.host,
+    //     dialect : Config.dialect
+    // }
     )
     
 const auth = async ()=>{

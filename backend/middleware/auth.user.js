@@ -67,5 +67,5 @@ const verifyUserSignup = async(req,res,next) =>{
 
 
 module.exports = {
-    verifyUserSignup : verifyUserSignup
+    verifyUserSignup
 }

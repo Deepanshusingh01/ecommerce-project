@@ -17,19 +17,18 @@ module.exports = {
       },
       productName : {
         type : Sequelize.STRING,
-        allownull : false
+        allowNull : false
       },
       productPrice: {
         type: Sequelize.INTEGER,
-        allownull : false
+        allowNull : false
       },
       quantity: {
         type: Sequelize.INTEGER,
-        allownull : false
+        allowNull : false
       },
       image :{
         type : Sequelize.STRING,
-        allownull: true
       },
       createdAt: {
         allowNull: false,

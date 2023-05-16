@@ -16,7 +16,6 @@ const sequelize = require('../config/db')
     },
     stripeSessionId : {
       type : DataTypes.STRING,
-      allownull : true
     },
     totalPrice: {
       type: DataTypes.INTEGER,
@@ -40,15 +39,12 @@ const sequelize = require('../config/db')
     },
     shippingAddressLine1: {
       type: DataTypes.STRING,
-      allowNull : true
     },
     shippingAddressLine2: {
       type: DataTypes.STRING,
-      allowNull : true
     },
     shippingCountry: {
       type: DataTypes.STRING(100),
-      allowNull : true
     },
     shippingState: {
       type: DataTypes.STRING(100),

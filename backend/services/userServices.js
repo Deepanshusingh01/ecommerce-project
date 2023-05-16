@@ -2,9 +2,10 @@ const db = require('../models');
 const User = db.user;
 
 
+
 module.exports = {
 
-    findAllUser:async ()=>{
+    findAllUser: async () => {
         const users = await User.findAll();
         return users;
     },

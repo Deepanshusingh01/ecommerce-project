@@ -8,7 +8,7 @@ module.exports = {
   async down (queryInterface, Sequelize) {
     await queryInterface.addColumn('products','rating',{
       type: Sequelize.INTEGER,
-      allownull: false
+      allowNull: false
     })
   }
 };

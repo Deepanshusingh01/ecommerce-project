@@ -4,7 +4,6 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.addColumn('carts','quantity',{
       type : Sequelize.INTEGER,
-      allownull:true
     })
   },
 

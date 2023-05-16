@@ -4,25 +4,25 @@ const sequelize = require('../config/db');
 const User = sequelize.define('user', {
   userId: {
     type: Sequelize.INTEGER,
-    allownull: false,
+    allowNull: false,
     primaryKey: true,
     autoIncrement: true,
   },
   name: {
     type: Sequelize.STRING(50),
-    allownull: false,
+    allowNull: false,
   },
   email: {
     type: Sequelize.STRING(50),
-    allownull: false,
+    allowNull: false,
   },
   password: {
     type: Sequelize.STRING,
-    allownull: false,
+    allowNull: false,
   },
   phoneNo: {
     type: Sequelize.BIGINT,
-    allownull: false,
+    allowNull: false,
   },
   createdAt: {
     type: Sequelize.DATE,
