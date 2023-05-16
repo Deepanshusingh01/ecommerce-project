@@ -1,7 +1,7 @@
-const Sequelize = require('sequelize');
-const sequelize = require('../config/db');
+const Sequelize = require("sequelize");
+const sequelize = require("../config/db");
 
-const Product = sequelize.define('product', {
+const Product = sequelize.define("product", {
   productId: {
     type: Sequelize.INTEGER,
     allowNull: false,
@@ -23,7 +23,7 @@ const Product = sequelize.define('product', {
   image: {
     type: Sequelize.STRING,
     allowNull: true,
-  }
+  },
 });
 
-module.exports = Product
+module.exports = Product;

@@ -2,9 +2,9 @@ const {cart,orderDetail,orderItem,product,user} = require('../models');
 
 
 
-const createOrder = async(userId)=>{
+const createOrder = async(userId) => {
 
-    const cartItems = await cart.findAll({where:{userId},include:[product]});
+    const cartItems = await cart.findAll({ where: { userId }, include: [product]});
     let totalPrice = 0;
     let totalQuantity = 0;
     let productDetail = []
@@ -12,18 +12,18 @@ const createOrder = async(userId)=>{
         totalPrice += item.product.price;
         totalQuantity += item.quantity;
         productDetail.push({
-            productId : item.productId,
-            productName : item.product.productName,
-            productPrice : item.product.price,
-            quantity : item.quantity,
-            image : item.product.image,
+            productId: item.productId,
+            productName: item.product.productName,
+            productPrice: item.product.price,
+            quantity: item.quantity,
+            image: item.product.image,
             
         })
     });
 
 
     const userDetail = await user.findByPk(userId)
-    const {name:userName,phoneNo:userMobileNo} = userDetail;
+    const { name: userName, phoneNo: userMobileNo } = userDetail;
     const orderDetails = await orderDetail.create({
         userId,
         totalPrice,
@@ -31,12 +31,12 @@ const createOrder = async(userId)=>{
         userName,
         userMobileNo,
     })
-    const orderItemResult = await createOrderItem(orderDetails.id,productDetail);
-    return {orderDetails,orderItemResult}
+    const orderItemResult = await createOrderItem(orderDetails.id, productDetail);
+    return { orderDetails, orderItemResult }
 }
 
 
-const createOrderItem = async(orderId,productDatail)=>{
+const createOrderItem = async(orderId, productDatail)=>{
 
     const orderItems = productDatail.map((item) => {
         item.orderId = orderId;
@@ -46,37 +46,37 @@ const createOrderItem = async(orderId,productDatail)=>{
     return result
 }
 
-const updateOrderPaymentStatus = async(session,orderStatus)=>{
-    const order = await orderDetail.findOne({where:{stripeSessionId:session.id}});
-    if(order){
+const updateOrderPaymentStatus = async(session, orderStatus)=>{
+    const order = await orderDetail.findOne({ where: { stripeSessionId: session.id }});
+    if(order) {
         await order.update({orderStatus:orderStatus})
     }
 }
 
-const updateOrderBySession = async(session) =>{
+const updateOrderBySession = async(session) => {
     const address = session.shipping_details.address;
 
     const addressDetail = {
-        shippingAddressLine1 : address.line1,
-        shippingAddressLine2 : address.line2,
-        shippingCountry : address.country,
-        shippingState : address.state,
-        shippingCity : address.city,
-        shippingPincode : address.postal_code,
-        shippingLandMark : ''
+        shippingAddressLine1: address.line1,
+        shippingAddressLine2: address.line2,
+        shippingCountry: address.country,
+        shippingState: address.state,
+        shippingCity: address.city,
+        shippingPincode: address.postal_code,
+        shippingLandMark: '',
     }
     let orderStatus;
     if(session.payment_status === 'paid'){
         orderStatus = 'CONFIRMED'
     }
 
-    const order = await orderDetail.findOne({where:{stripeSessionId:session.id}})
-    await order.update({orderStatus,...addressDetail})
+    const order = await orderDetail.findOne({ where: { stripeSessionId: session.id } })
+    await order.update({ orderStatus, ...addressDetail })
 }
 
 
 module.exports = {
     createOrder,
     updateOrderPaymentStatus,
-    updateOrderBySession
+    updateOrderBySession,
 }

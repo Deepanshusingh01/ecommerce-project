@@ -1,7 +1,7 @@
-const Sequelize = require('sequelize');
-const sequelize = require('../config/db')
+const Sequelize = require("sequelize");
+const sequelize = require("../config/db");
 
-const Cart = sequelize.define('cart', {
+const Cart = sequelize.define("cart", {
   cartId: {
     allowNull: false,
     autoIncrement: true,
@@ -16,9 +16,9 @@ const Cart = sequelize.define('cart', {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
-  quantity:{
-    type : Sequelize.INTEGER,
-  }
+  quantity: {
+    type: Sequelize.INTEGER,
+  },
 });
 
-module.exports = Cart
+module.exports = Cart;

@@ -14,5 +14,5 @@ const findProductByPk = async (productId) => {
 
 module.exports = {
     findAllProducts,
-    findProductByPk
+    findProductByPk,
 }
