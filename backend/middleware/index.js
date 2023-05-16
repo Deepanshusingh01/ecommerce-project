@@ -4,5 +4,5 @@ const verifySession = require('./verifySession')
 module.exports = {
     auth,
     verifyUser,
-    verifySession
+    verifySession,
 }
