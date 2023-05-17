@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-const { Model, DataTypes } = require("sequelize");
-const sequelize = require("../config/db");
+const { Model, DataTypes } = require('sequelize');
+const sequelize = require('../config/db');
 
 class OrderItem extends Model {}
 
@@ -32,7 +32,7 @@ OrderItem.init(
   },
   {
     sequelize,
-    modelName: "orderItem",
+    modelName: 'orderItem',
   }
 );
 

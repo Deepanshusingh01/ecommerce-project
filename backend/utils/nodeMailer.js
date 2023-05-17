@@ -1,18 +1,18 @@
-const nodemailer = require("nodemailer");
+const nodemailer = require('nodemailer');
 
 const nodeMailer = (email, otp) => {
   const transport = nodemailer.createTransport({
-    service: "gmail",
+    service: 'gmail',
     auth: {
-      user: "deepanshuthakur791@gmail.com",
-      pass: "hlaqvssfwfyiedlc",
+      user: 'deepanshuthakur791@gmail.com',
+      pass: 'hlaqvssfwfyiedlc',
     },
     secure: true,
   });
   mailOption = {
-    from: "ecommerce-project@gmail.com",
+    from: 'ecommerce-project@gmail.com',
     to: `${email}`,
-    subject: "Recovering Password",
+    subject: 'Recovering Password',
     text: `Follow the Instructions: use this otp ${otp} to generate new password `,
   };
   transport.sendMail(mailOption, (err, info) => {
