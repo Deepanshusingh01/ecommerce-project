@@ -2,8 +2,8 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('orderItems', {
-      id: {
+    await queryInterface.createTable('order_Items', {
+      orderItemId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -41,6 +41,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('orderItems');
+    await queryInterface.dropTable('order_Items');
   }
 };

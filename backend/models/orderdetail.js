@@ -5,7 +5,7 @@ const sequelize = require('../config/db');
 class OrderDetail extends Model {}
 OrderDetail.init(
   {
-    id: {
+    orderDetailId: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
@@ -70,7 +70,7 @@ OrderDetail.init(
   },
   {
     sequelize,
-    modelName: 'OrderDetail',
+    modelName: 'order_detail',
   }
 );
 

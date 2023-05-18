@@ -28,6 +28,7 @@ Reset.init(
   },
   {
     sequelize,
+    modelName: 'Reset_Token'
   }
 );
 

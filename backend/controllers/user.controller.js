@@ -59,6 +59,7 @@ exports.signin = async (req, res) => {
             req.session.user = {
                 userId: user.userId
             }
+  
             session.views = (session.views || 0) + 1
             return res.status(200).send({ response, mesg: `You have visited this page ${session.views} times`})
         } else {

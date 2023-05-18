@@ -28,9 +28,9 @@ app.use(
   });
   */
 
-const orderController = require('./controller/order.controller');
-
+const orderController = require('./controllers/order.controller');
 app.post('/stripe/webhook', express.raw({ type: 'application/json' }), orderController.stripeWebHook);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, './productImages'))); // FIXME :not able to access productImages on browser
@@ -43,15 +43,21 @@ sequelize.sync({ alter: true })
     console.log(err.message);
   });
 
-const productRoute = require('./route/product.route');
-const userRoute = require('./route/user.route');
-const cartRoute = require('./route/cart.route');
-const orderRoute = require('./route/order.route');
+const productRoute = require('./routes/product.route');
+const cartRoute = require('./routes/cart.route');
+const orderRoute = require('./routes/order.route');
+const userRoute = require('./routes/user.route');
+const {routeNotFound} = require('./middleware')
+
+
 
 app.use(productRoute);
 app.use(cartRoute);
 app.use(userRoute);
 app.use(orderRoute);
+app.use(routeNotFound)
+
+
 
 app.listen(serverConfig.PORT, () => {
   console.log('Server started at Port :', serverConfig.PORT);
