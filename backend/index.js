@@ -50,10 +50,9 @@ const userRoute = require('./routes/user.route');
 const {routeNotFound} = require('./middleware')
 
 
-
+app.use(userRoute);
 app.use(productRoute);
 app.use(cartRoute);
-app.use(userRoute);
 app.use(orderRoute);
 app.use(routeNotFound)
 
