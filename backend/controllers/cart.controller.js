@@ -1,7 +1,7 @@
 const db = require('../models');
 const Cart = db.cart;
 const Product = db.product;
-const {StatusCodes} = require('http-status-codes')
+const { StatusCodes } = require('http-status-codes')
 
 exports.addCart = async (req, res) => {
   try {

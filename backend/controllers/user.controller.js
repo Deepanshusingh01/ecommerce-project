@@ -7,7 +7,7 @@ const config = require('../config/server.config');
 const userService = require('../services/userServices')
 const { nodeMailer } = require('../utils/nodeMailer')
 const  moment = require('moment')
-const {StatusCodes} = require('http-status-codes')
+const { StatusCodes } = require('http-status-codes')
 
 
 exports.signup = async(req, res) =>{
@@ -217,11 +217,11 @@ exports.refreshToken = (req, res) => {
     try{
     const user = req.user
     const accessToken = jwt.sign({ id: user.userId }, config.SECRET, { expiresIn: 6000 })
-    return res.status(200).send({ accessToken: accessToken })
+    return res.status(StatusCodes.OK).send({ accessToken: accessToken })
 
     } catch(err) {
         console.log('Error while creating access token',err)
-        return res.status(500).send({
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
             mesg: 'Internal server error'
         })
     }

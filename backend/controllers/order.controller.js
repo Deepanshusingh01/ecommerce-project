@@ -1,6 +1,6 @@
 const orderService = require('../services/orderService');
 const stripe = require('../payment/stripe');
-const {StatusCodes} = require('http-status-codes')
+const { StatusCodes } = require('http-status-codes')
 const { cart, orderDetail } = require('../models');
 
 const stripeWebHook = async (req, res) => {

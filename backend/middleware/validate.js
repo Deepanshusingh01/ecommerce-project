@@ -1,10 +1,11 @@
-
+const { StatusCodes } = require('http-status-codes')
+ 
 const validate = (validateSchema) => {
     const schema = validateSchema.body;
     return (req, res, next) => {
         const validation = schema.validate(req.body)
         if(validation.error) {
-            return res.status(400).json({ error: validation.error.details[0].message })
+            return res.status(StatusCodes.BAD_REQUEST).json({ error: validation.error.details[0].message })
         }
         next()
     }
@@ -17,7 +18,7 @@ const validate = (validateSchema) => {
 //         const id = parseInt(req.params.id)
 //         const validation = params.validate(id);
 //         if(validation.error) {
-//             return res.status(400).json({ error: validation.error.details[0].message })
+//             return res.status(StatusCodes.BAD_REQUEST).json({ error: validation.error.details[0].message })
 //         }
 //         next()
 //     }
