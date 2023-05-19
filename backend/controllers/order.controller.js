@@ -1,6 +1,6 @@
 const orderService = require('../services/orderService');
 const stripe = require('../payment/stripe');
-
+const {StatusCodes} = require('http-status-codes')
 const { cart, orderDetail } = require('../models');
 
 const stripeWebHook = async (req, res) => {
@@ -12,7 +12,7 @@ const stripeWebHook = async (req, res) => {
     event = stripe.webhooks.constructEvent(req.body, signature, endPointSecret);
   } catch (err) {
     console.log('Error while calling webhook', err);
-    return res.status(500).send({
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
       mesg: 'Internal server error',
     });
   }
@@ -70,7 +70,7 @@ const stripeWebHook = async (req, res) => {
     default:
       console.log(`unhandle event type ${event.type}`);
   }
-  return res.status(200).send({
+  return res.status(StatusCodes.OK).send({
     mesg: 'sucessful',
   });
 };
@@ -126,7 +126,7 @@ const checkOutSession = async (req, res) => {
     });
 
     await orderDetails.update({ stripeSessionId: session.id });
-    return res.status(200).send({
+    return res.status(StatusCodes.OK).send({
       mesg: 'successfully created checkout session',
       url : session.url
     });

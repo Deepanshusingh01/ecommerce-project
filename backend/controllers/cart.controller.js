@@ -1,6 +1,7 @@
 const db = require('../models');
 const Cart = db.cart;
 const Product = db.product;
+const {StatusCodes} = require('http-status-codes')
 
 exports.addCart = async (req, res) => {
   try {
@@ -11,10 +12,10 @@ exports.addCart = async (req, res) => {
       productId,
       quantity,
     });
-    return res.status(201).send(cart);
+    return res.status(StatusCodes.CREATED).send(cart);
   } catch (err) {
     console.log('Error while adding product in cart', err);
-    return res.status(500).send({
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
       mesg: 'Internal server error',
     });
   }
@@ -30,7 +31,7 @@ exports.getCartProducts = async (req, res) => {
     let totalQuantity = 0;
     let totalPrice = 0;
     if (product.length == 0) {
-      return res.status(400).send({
+      return res.status(StatusCodes.BAD_REQUEST).send({
         mesg: 'Cart is empty',
       });
     }
@@ -38,10 +39,10 @@ exports.getCartProducts = async (req, res) => {
       totalQuantity += item.quantity;
       totalPrice += item.product.price * item.quantity;
     });
-    return res.status(200).send({ product: product, totalPrice, totalQuantity });
+    return res.status(StatusCodes.OK).send({ product: product, totalPrice, totalQuantity });
   } catch (err) {
     console.log('Error while getting cart products', err);
-    return res.status(500).send({
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
       mesg: 'Internal server error',
     });
   }
@@ -55,13 +56,13 @@ exports.removeCartProducts = async (req, res) => {
       ids.forEach(async (productId) => {
         await Cart.destroy({ where: { userId, productId } });
       });
-      return res.status(200).send({
+      return res.status(StatusCodes.OK).send({
         mesg: 'Successfully removed product from cart',
       });
     }
   } catch (err) {
     console.log('Error while removing cart product', err);
-    return res.status(500).send({
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
       mesg: 'Internal server error',
     });
   }

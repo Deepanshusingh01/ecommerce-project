@@ -1,13 +1,14 @@
 const db = require('../models');
 const Product = db.product;
-const productService = require('../services/productServices')
+const productService = require('../services/productServices');
 const Op = require('sequelize').Op;
+const { StatusCodes } = require('http-status-codes');
 
 exports.addProduct = async(req, res) => {
 
     try{
 
-    const { productName, price, description } = req.body
+    const { productName, price, description } = req.body;
     const product = await Product.create({
         productName,
         description,
@@ -15,10 +16,10 @@ exports.addProduct = async(req, res) => {
         image:req.file.filename,
     }) 
 
-    return res.status(200).send(product)
+    return res.status(StatusCodes.CREATED).send(product);
 }catch(err){
     console.log('Error while adding new product', err);
-    return res.status(500).send({
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
         mesg: 'Internal server error'
     })
 }
@@ -28,10 +29,10 @@ exports.addProduct = async(req, res) => {
 exports.allProducts = async(req, res) => {
 
     try{
-    let { limit, page, search } = req.query
+    let { limit, page, search } = req.query;
     limit = parseInt(limit) || 10 ;
-    page = parseInt(page) || 1
-    let offset = page * limit - limit
+    page = parseInt(page) || 1;
+    let offset = page * limit - limit;
     let query;
     let count;
     if(search) {
@@ -66,12 +67,12 @@ exports.allProducts = async(req, res) => {
             offset: offset,
             order: [['createdAt','DESC']]
         })
-        count = await Product.count()
+        count = await Product.count();
     }
-    return res.status(200).send({ product: query, pagination: { count, limit, page, search }})
+    return res.status(StatusCodes.OK).send({ product: query, pagination: { count, limit, page, search }})
     }catch(err){
         console.log('Error while finding all product', err);
-        return res.status(500).send({
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
             mesg: 'Internal server error'
         })
     }
@@ -85,10 +86,10 @@ exports.findByPk = async (req, res) => {
     const productId = req.params.id
     const product = await productService.findProductByPk(productId);
 
-    return res.status(200).send(product)
+    return res.status(StatusCodes.OK).send(product)
     }catch(err){
         console.log('Error while finding product by productId', err);
-        return res.status(500).send({
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
             mesg: 'Internal server error'
         })
     }
