@@ -47,8 +47,8 @@ exports.signin = async (req, res) => {
     if(user) {
         const validPassword = bcrypt.compareSync(password, user.password)
         if(validPassword) {
-            const token = jwt.sign({id: user.userId}, config.SECRET, { expiresIn: 6000 })
-            const refreshToken = jwt.sign({id: user.userId}, config.SECRET1, { expiresIn: 10000 })
+            const token = jwt.sign({id: user.userId}, config.SECRET, { expiresIn: 120 }) // 2 min
+            const refreshToken = jwt.sign({id: user.userId}, config.SECRET1, { expiresIn: 600 }) // 10 min
             const response = {
                 userId: user.userId,
                 name: user.name,
