@@ -1,8 +1,8 @@
-"use-strict";
+'use-strict';
 
-const { Model, DataTypes } = require("sequelize");
-const sequelize = require("../config/db");
-const moment = require("moment");
+const { Model, DataTypes } = require('sequelize');
+const sequelize = require('../config/db');
+const moment = require('moment');
 
 class Reset extends Model {}
 
@@ -23,11 +23,12 @@ Reset.init(
     },
     expires: {
       type: DataTypes.DATE,
-      defaultValue: moment().add(4, "minutes").toDate(),
+      defaultValue: moment().add(4, 'minutes').toDate(),
     },
   },
   {
     sequelize,
+    modelName: 'Reset_Token'
   }
 );
 

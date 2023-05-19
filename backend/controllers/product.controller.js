@@ -28,7 +28,6 @@ exports.addProduct = async(req, res) => {
 exports.allProducts = async(req, res) => {
 
     try{
-
     let { limit, page, search } = req.query
     limit = parseInt(limit) || 10 ;
     page = parseInt(page) || 1

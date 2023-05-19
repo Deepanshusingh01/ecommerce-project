@@ -1,11 +1,11 @@
-"use strict";
-const { DataTypes, Model } = require("sequelize");
-const sequelize = require("../config/db");
+'use strict';
+const { DataTypes, Model } = require('sequelize');
+const sequelize = require('../config/db');
 
 class OrderDetail extends Model {}
 OrderDetail.init(
   {
-    id: {
+    orderDetailId: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
@@ -27,8 +27,8 @@ OrderDetail.init(
       allowNull: false,
     },
     orderStatus: {
-      type: DataTypes.ENUM("SHIPPED", "CANCELLED", "PENDING", "REJECTED", "PROCESSING", "DELIVERED", "FAILED", "CONFIRMED"),
-      defaultValue: "PENDING",
+      type: DataTypes.ENUM('SHIPPED', 'CANCELLED', 'PENDING', 'REJECTED', 'PROCESSING', 'DELIVERED', 'FAILED', 'CONFIRMED'),
+      defaultValue: 'PENDING',
     },
     userName: {
       type: DataTypes.STRING(50),
@@ -70,7 +70,7 @@ OrderDetail.init(
   },
   {
     sequelize,
-    modelName: "OrderDetail",
+    modelName: 'order_detail',
   }
 );
 

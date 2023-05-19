@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-const { Model, DataTypes } = require("sequelize");
-const sequelize = require("../config/db");
+const { Model, DataTypes } = require('sequelize');
+const sequelize = require('../config/db');
 
 class OrderItem extends Model {}
 
@@ -22,17 +22,17 @@ OrderItem.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    image: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
+    // image: {
+    //   type: DataTypes.STRING,
+    //   allowNull: true,
+    // },
     orderId: {
       type: DataTypes.INTEGER,
     },
   },
   {
     sequelize,
-    modelName: "orderItem",
+    modelName: 'order_Item',
   }
 );
 

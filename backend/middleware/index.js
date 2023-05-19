@@ -1,8 +1,15 @@
-const auth = require('./auth.jwt');
+const { verifyToken, refreshToken } = require('./auth.jwt');
 const verifyUser = require('./auth.user')
 const verifySession = require('./verifySession')
+const routeNotFound = require('./notFoundError')
+const { validate } = require('./validate')
+
 module.exports = {
-    auth,
+    verifyToken,
+    refreshToken,
     verifyUser,
-    verifySession
+    verifySession,
+    routeNotFound,
+    validate,
+    // validateParam
 }

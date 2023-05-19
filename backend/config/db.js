@@ -8,14 +8,14 @@ const sequelize = new Sequelize(
     Config.database,
     Config.username,
     Config.password,
-    {
-        ...Config,
-        logging:false
-    }
     // {
-    //     host:Config.host,
-    //     dialect : Config.dialect
+    //     ...Config,
+    //     logging:false
     // }
+    {
+        host:Config.host,
+        dialect : Config.dialect
+    }
     )
     
 const auth = async ()=>{
