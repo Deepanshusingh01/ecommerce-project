@@ -70,7 +70,7 @@ exports.signin = async (req, res) => {
             })
         }
     } else {
-        return res.status(httpStatus.StatusCodes.BAD_REQUEST).send({
+        return res.status(StatusCodes.BAD_REQUEST).send({
             mesg: 'Email does not exist'
         })
     }
