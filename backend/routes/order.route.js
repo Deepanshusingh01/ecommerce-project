@@ -1,9 +1,8 @@
 const orderController = require('../controllers/order.controller')
-const {auth} = require('../middleware');
 const router = require('express').Router()
-const { verifySession } = require('../middleware');
+const { verifySession, verifyToken } = require('../middleware');
 router.use(verifySession)
 
-router.post('/create-checkout-session', auth.verifyToken, orderController.checkOutSession)
+router.post('/create-checkout-session', verifyToken, orderController.checkOutSession)
 
 module.exports = router

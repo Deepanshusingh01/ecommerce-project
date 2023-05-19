@@ -7,6 +7,7 @@ const config = require('../config/server.config');
 const userService = require('../services/userServices')
 const { nodeMailer } = require('../utils/nodeMailer')
 const  moment = require('moment')
+const {StatusCodes} = require('http-status-codes')
 
 
 exports.signup = async(req, res) =>{
@@ -27,10 +28,10 @@ exports.signup = async(req, res) =>{
         name: user.name,
     }
 
-    return res.status(201).send(response)
+    return res.status(StatusCodes.CREATED).send(response)
 }catch(err){
     console.log('error while registering new user', err);
-    return res.status(500).send({
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
         mesg: 'Internal server error'
     })
 }
@@ -40,20 +41,21 @@ exports.signup = async(req, res) =>{
 exports.signin = async (req, res) => {
 
     try{
-        
     const { email, password } = req.body
     const user = await User.findOne({ where: { email }});
-    const session = {req}
+    const session = req.session
     if(user) {
         const validPassword = bcrypt.compareSync(password, user.password)
         if(validPassword) {
             const token = jwt.sign({id: user.userId}, config.SECRET, { expiresIn: 6000 })
+            const refreshToken = jwt.sign({id: user.userId}, config.SECRET1, { expiresIn: 10000 })
             const response = {
                 userId: user.userId,
                 name: user.name,
                 email: user.email,
                 phoneNo: user.phoneNo,
                 accessToken: token,
+                refreshToken: refreshToken,
             }
 
             req.session.user = {
@@ -61,20 +63,20 @@ exports.signin = async (req, res) => {
             }
   
             session.views = (session.views || 0) + 1
-            return res.status(200).send({ response, mesg: `You have visited this page ${session.views} times`})
+            return res.status(StatusCodes.OK).send({ response, mesg: `You have visited this page ${session.views} times`})
         } else {
-            return res.status(400).send({
+            return res.status(StatusCodes.BAD_REQUEST).send({
                 mesg: 'Email or Password may be wrong'
             })
         }
     } else {
-        return res.status(400).send({
+        return res.status(httpStatus.StatusCodes.BAD_REQUEST).send({
             mesg: 'Email does not exist'
         })
     }
 }catch(err){
     console.log('Error while user login', err);
-    return res.status(500).send({
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
         mesg: 'Internal server error'
     })
 }
@@ -85,10 +87,10 @@ exports.findAll = async (req, res) => {
 
     try{
         const users = await userService.findAllUser();
-        return res.status(200).send(users)
+        return res.status(StatusCodes.OK).send(users)
     } catch(err){
         console.log('Error while finding all users', err);
-        return res.status(500).send({
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
             mesg: 'Internal server error'
         })
     }
@@ -102,14 +104,14 @@ exports.findById = async (req, res) => {
     const user = await userService.findUserByPk(userId);
 
     if(!user) {
-        return res.status(400).send({
+        return res.status(StatusCodes.BAD_REQUEST).send({
             mesg: 'User does not exist'
         })
     }
-    return res.status(200).send(user)
+    return res.status(StatusCodes.OK).send(user)
 }catch(err){
     console.log('Error while finding user by userId', err);
-    return res.status(500).send({
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
         mesg: 'Internal server error'
     })
 }
@@ -120,10 +122,10 @@ exports.updateUser = async(req, res) => {
     try{
     const userId = req.params.id
     const updatedUser = await userService.updateUserByUserId(req.body,userId);
-    return res.status(200).send(updatedUser)
+    return res.status(StatusCodes.OK).send(updatedUser)
     }catch(err){
         console.log('Error while updating user by userId', err);
-        return res.status(500).send({
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
             mesg: 'Internal server error'
         })
     }
@@ -141,7 +143,7 @@ exports.forgetPassword = async(req,res) =>{
             otp,
         })
         // nodeMailer(email,otp)
-        return res.status(200).send({ mesg: `Use : ${reset.otp} OTP to generate new password sent to this email:${email} using this URl :${'http://localhost:8080/user/reset-password/your-otp/your-userId'} expiresIn : 4 min`})
+        return res.status(StatusCodes.OK).send({ mesg: `Use : ${reset.otp} OTP to generate new password sent to this email:${email} using this URl :${'http://localhost:8080/user/reset-password/your-otp/your-userId'} expiresIn : 4 min`})
     }
 
 }
@@ -153,26 +155,26 @@ exports.resetPasswordUsingOtp = async(req, res) => {
     if(userDetail) {
         if (moment(userDetail.expires).isBefore(moment())) {
             await ResetToken.destroy({ where: { userId }})
-            return res.status(400).send({
+            return res.status(StatusCodes.BAD_REQUEST).send({
                 mesg: `OTP ${ userDetail.otp } has expired`
             })
           } else {
             const { password } = req.body
             if(!password) {
-                return res.status(400).send({
+                return res.status(StatusCodes.BAD_REQUEST).send({
                     mesg: 'New Password is not provided'
                 })
             }
             const hashpassword = bcrypt.hashSync(password,2)
             await userDetail.user.update({ password: hashpassword });
             await ResetToken.destroy({ where: { userId }})
-            return res.status(200).send({
+            return res.status(StatusCodes.OK).send({
                 mesg: 'password is reseted'
             })
         }
     }
     await ResetToken.destroy({ where: {}})
-    return res.status(400).send({
+    return res.status(StatusCodes.BAD_REQUEST).send({
         mesg: 'Invalid OTP or User'
     })
 }
@@ -185,26 +187,43 @@ exports.resetPassword = async(req, res) => {
     if(oldPassword && newPassword){
         const password = bcrypt.compareSync(oldPassword, user.password)
         if(!password) {
-            return res.status(400).send({
+            return res.status(StatusCodes.BAD_REQUEST).send({
                 mesg: 'current(old) Password is Wrong'
             })
         }
         const hashpassword = bcrypt.hashSync(newPassword, 2)
         await user.update({ password: hashpassword })
-        return res.status(200).send({
+        return res.status(StatusCodes.OK).send({
             mseg: 'Password Updated'
         })
     } else {
         if(!oldPassword) {
-            return res.status(400).send({
+            return res.status(StatusCodes.BAD_REQUEST).send({
                 mesg: 'Old Password is not Provided'
             })
         }
         if(!newPassword) {
-            return res.status(400).send({
+            return res.status(StatusCodes.BAD_REQUEST).send({
                 mesg: 'New Password is not Provided'
             })
         }
+    }
+
+}
+
+
+exports.refreshToken = (req, res) => {
+    
+    try{
+    const user = req.user
+    const accessToken = jwt.sign({ id: user.userId }, config.SECRET, { expiresIn: 6000 })
+    return res.status(200).send({ accessToken: accessToken })
+
+    } catch(err) {
+        console.log('Error while creating access token',err)
+        return res.status(500).send({
+            mesg: 'Internal server error'
+        })
     }
 
 }

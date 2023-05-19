@@ -35,11 +35,12 @@ const login = {
         email: Joi.string().required().email().messages({
             'any.required': 'Email is required.',
             'string.empty': 'Email connot be empty.',
-            'string.email': 'Invalid Email Formate'
+            'string.email': 'Invalid Email Formate.'
         }).custom(isValidEmail),
-        password: Joi.string().required().messages({
-            'any.required': 'Password is required',
-            'string.empty': 'Password cannot be empty'
+        password: Joi.string().required().min(8).messages({
+            'any.required': 'Password is required.',
+            'string.empty': 'Password cannot be empty.',
+            'string.min': 'Password must be at least 8 characters long'
         }).custom(isValidPassword)
     })
 }
