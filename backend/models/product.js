@@ -27,7 +27,14 @@ const Product = sequelize.define('product', {
   image: {
     type: Sequelize.STRING,
     allowNull: true,
+  },
+  deletedAt: {
+    type: Sequelize.DATE,
+    allowNull: true,
+    defaultValue: null
   }
+},{
+  paranoid: true,
 });
 
 module.exports = Product;
