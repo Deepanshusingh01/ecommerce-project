@@ -40,7 +40,7 @@ const login = {
         password: Joi.string().required().min(8).messages({
             'any.required': 'Password is required.',
             'string.empty': 'Password cannot be empty.',
-            'string.min': 'Password must be at least 8 characters long'
+            'string.min': 'Password must be at least 8 characters long.'
         }).custom(isValidPassword)
     })
 }

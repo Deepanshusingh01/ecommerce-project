@@ -9,4 +9,5 @@ router.use(verifySession)
 router.post('/user/product', upload.single('file'), validate(verifyAddProduct), productController.addProduct);
 router.get('/user/products', productController.allProducts);
 router.get('/user/product/:id', productController.findByPk)
+router.delete('/user/product/delete', productController.deleteProduct)
 module.exports = router;

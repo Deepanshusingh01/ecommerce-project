@@ -8,6 +8,10 @@ const Product = sequelize.define('product', {
     primaryKey: true,
     autoIncrement: true,
   },
+  createdBy: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
   productName: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -23,7 +27,7 @@ const Product = sequelize.define('product', {
   image: {
     type: Sequelize.STRING,
     allowNull: true,
-  },
+  }
 });
 
 module.exports = Product;
