@@ -21,12 +21,6 @@ app.use(
   })
 );
 
-/**  app.get('/', (req, res) => {
-     const { session } = req;
-     session.views = (session.views || 0) + 1;
-    res.send(`You have visited this page ${session.views} times`);
-  });
-  */
 
 const orderController = require('./controllers/order.controller');
 app.post('/stripe/webhook', express.raw({ type: 'application/json' }), orderController.stripeWebHook);
@@ -43,17 +37,11 @@ sequelize.sync({ alter: true })
     console.log(err.message);
   });
 
-const productRoute = require('./routes/product.route');
-const cartRoute = require('./routes/cart.route');
-const orderRoute = require('./routes/order.route');
-const userRoute = require('./routes/user.route');
+
+const apiRoutes = require('./routes/apiRoutes')
 const { routeNotFound } = require('./middleware')
 
-
-app.use(userRoute);
-app.use(productRoute);
-app.use(cartRoute);
-app.use(orderRoute);
+app.use(apiRoutes)
 app.use(routeNotFound)
 
 

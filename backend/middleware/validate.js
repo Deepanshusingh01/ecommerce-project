@@ -4,8 +4,10 @@ const { StatusCodes } = require("http-status-codes");
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    // errors.array().map((err) => extractedError.push(err.msg))
+    // errors.array().map((err) => extractedError.push({[err.params || 'mesg']:err.msg}))
     return res.status(StatusCodes.BAD_REQUEST).send({
-        error: errors.array()
+        error: errors.array()[0].msg
     })
   }
   next()

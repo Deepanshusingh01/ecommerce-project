@@ -9,8 +9,8 @@ router.post('/user/signin', userValidation.login, validate, userController.signi
 router.post('/user/forget-password', userController.forgetPassword);
 router.post('/user/reset-password/:otp/:userId', userController.resetPasswordUsingOtp);
 router.get('/users', userController.findAll);
-router.get('/api/user/:id', userController.findById);
-router.get('/api/user/:id', userController.updateUser);
+router.get('/user/:id', userController.findById);
+router.get('/user/:id', userController.updateUser);
 router.get('/refresh_token', refreshToken, userController.refreshToken)
 
 router.use(verifySession)

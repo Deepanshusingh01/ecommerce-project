@@ -1,25 +1,26 @@
 const { body } = require("express-validator");
+const { isValidImage } = require("../middleware");
 
 const verifyAddProduct = [
-
   body("productName")
-    .isString()
-    .withMessage("Product Name should be a string")
     .notEmpty()
-    .withMessage("Product name cannot be empty"),
+    .withMessage("Product name cannot be empty")
+    .isString()
+    .withMessage("Product Name should be a string"),
   body("description")
+    .notEmpty()
+    .withMessage("Description cannot be empty")
     .isString()
-    .withMessage("Description should be a string")
-    .notEmpty()
-    .withMessage("Description cannot be empty"),
+    .withMessage("Description should be a string"),
   body("price")
-    .isNumeric()
-    .withMessage("Price must be a number")
     .notEmpty()
-    .withMessage("Price cannot be empty"),
+    .withMessage("Price cannot be empty")
+    .isNumeric()
+    .withMessage("Price must be a number"),
+  body("image").custom(isValidImage),
 ];
 
-
+// -------------------------------------------------------old----------------------------------------
 // const joi = require("joi");
 // const verifyAddProduct = {
 //   body: joi.object().keys({
@@ -55,4 +56,3 @@ module.exports = {
   verifyAddProduct,
   // verifyFindByPk,
 };
-
