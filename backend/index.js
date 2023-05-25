@@ -27,7 +27,7 @@ app.post('/stripe/webhook', express.raw({ type: 'application/json' }), orderCont
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, './productImages'))); // FIXME: not able to access productImages on browser
+app.use(express.static(path.join(__dirname, 'productImages')))
 
 sequelize.sync({ alter: true })
   .then(() => {
@@ -42,7 +42,7 @@ const apiRoutes = require('./routes/apiRoutes')
 const { routeNotFound } = require('./middleware')
 
 app.use(apiRoutes)
-app.use(routeNotFound)
+// app.use(routeNotFound)
 
 
 
