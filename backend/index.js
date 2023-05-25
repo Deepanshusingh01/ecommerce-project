@@ -21,19 +21,13 @@ app.use(
   })
 );
 
-/**  app.get('/', (req, res) => {
-     const { session } = req;
-     session.views = (session.views || 0) + 1;
-    res.send(`You have visited this page ${session.views} times`);
-  });
-  */
 
 const orderController = require('./controllers/order.controller');
 app.post('/stripe/webhook', express.raw({ type: 'application/json' }), orderController.stripeWebHook);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, './productImages'))); // FIXME :not able to access productImages on browser
+app.use(express.static(path.join(__dirname, './productImages'))); // FIXME: not able to access productImages on browser
 
 sequelize.sync({ alter: true })
   .then(() => {
@@ -43,17 +37,11 @@ sequelize.sync({ alter: true })
     console.log(err.message);
   });
 
-const productRoute = require('./routes/product.route');
-const cartRoute = require('./routes/cart.route');
-const orderRoute = require('./routes/order.route');
-const userRoute = require('./routes/user.route');
-const {routeNotFound} = require('./middleware')
 
+const apiRoutes = require('./routes/apiRoutes')
+const { routeNotFound } = require('./middleware')
 
-app.use(userRoute);
-app.use(productRoute);
-app.use(cartRoute);
-app.use(orderRoute);
+app.use(apiRoutes)
 app.use(routeNotFound)
 
 

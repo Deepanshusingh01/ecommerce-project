@@ -7,7 +7,7 @@ const config = require('../config/server.config');
 const userService = require('../services/userServices')
 const { nodeMailer } = require('../utils/nodeMailer')
 const  moment = require('moment')
-const {StatusCodes} = require('http-status-codes')
+const { StatusCodes } = require('http-status-codes')
 
 
 exports.signup = async(req, res) =>{
@@ -47,8 +47,8 @@ exports.signin = async (req, res) => {
     if(user) {
         const validPassword = bcrypt.compareSync(password, user.password)
         if(validPassword) {
-            const token = jwt.sign({id: user.userId}, config.SECRET, { expiresIn: 6000 })
-            const refreshToken = jwt.sign({id: user.userId}, config.SECRET1, { expiresIn: 10000 })
+            const token = jwt.sign({id: user.userId}, config.SECRET, { expiresIn: 120 }) // 2 min
+            const refreshToken = jwt.sign({id: user.userId}, config.SECRET1, { expiresIn: 600 }) // 10 min
             const response = {
                 userId: user.userId,
                 name: user.name,
@@ -70,7 +70,7 @@ exports.signin = async (req, res) => {
             })
         }
     } else {
-        return res.status(httpStatus.StatusCodes.BAD_REQUEST).send({
+        return res.status(StatusCodes.BAD_REQUEST).send({
             mesg: 'Email does not exist'
         })
     }
@@ -217,11 +217,11 @@ exports.refreshToken = (req, res) => {
     try{
     const user = req.user
     const accessToken = jwt.sign({ id: user.userId }, config.SECRET, { expiresIn: 6000 })
-    return res.status(200).send({ accessToken: accessToken })
+    return res.status(StatusCodes.OK).send({ accessToken: accessToken })
 
     } catch(err) {
         console.log('Error while creating access token',err)
-        return res.status(500).send({
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
             mesg: 'Internal server error'
         })
     }

@@ -8,6 +8,10 @@ const Product = sequelize.define('product', {
     primaryKey: true,
     autoIncrement: true,
   },
+  createdBy: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
   productName: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -24,6 +28,13 @@ const Product = sequelize.define('product', {
     type: Sequelize.STRING,
     allowNull: true,
   },
+  deletedAt: {
+    type: Sequelize.DATE,
+    allowNull: true,
+    defaultValue: null
+  }
+},{
+  paranoid: true,
 });
 
 module.exports = Product;

@@ -1,9 +1,11 @@
-// const userV1  = require('../route/user.route')
-// const productV1 = require('../route/product.route');
-// const cartV1 = require('../route/cart.route')
+const userV1  = require('./user.route')
+const productV1 = require('./product.route');
+const cartV1 = require('./cart.route');
+const orderV1 = require('./order.route')
 
-// module.exports = {
-//     userV1,
-//     productV1,
-//     cartV1
-// }
+module.exports = {
+    userV1,
+    productV1,
+    cartV1,
+    orderV1,
+}
