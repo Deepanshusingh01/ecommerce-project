@@ -42,7 +42,7 @@ const apiRoutes = require('./routes/apiRoutes')
 const { routeNotFound } = require('./middleware')
 
 app.use(apiRoutes)
-// app.use(routeNotFound)
+app.use(routeNotFound)
 
 
 
