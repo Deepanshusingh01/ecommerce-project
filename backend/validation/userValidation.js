@@ -4,24 +4,29 @@ const { isValidEmail, isValidPassword } = require('../middleware/auth.user')
 
 const registerUser = [
     body('name')
-    .not()
     .notEmpty()
-    .withMessage('Name is required'),
+    .withMessage('Name is required')
+    .trim(),
     body('email')
     .notEmpty()
     .withMessage('Email is required')
+    .trim()
     .isEmail()
     .withMessage('Email is not valid')
+    .normalizeEmail()
     .custom(isValidEmail),
     body('password')
     .notEmpty()
     .withMessage('Password is required')
+    .trim()
     .isLength({min:6})
     .withMessage('Password should be at least 6 characters long')
+    .isStrongPassword()
     .custom(isValidPassword),
     body('phoneNo')
     .notEmpty()
     .withMessage('Phone number is required')
+    .trim()
     .isLength({ min: 10, max: 10})
     .withMessage('Phone number should be of 10 digit')
 ]
@@ -30,10 +35,21 @@ const registerUser = [
 const login = [
     body('email')
     .notEmpty()
-    .withMessage('Email is required'),
+    .withMessage('Email is required')
+    .trim()
+    .isEmail()
+    .withMessage('Invalid email address')
+    .normalizeEmail(),
     body('password')
     .notEmpty()
     .withMessage('Password is required')
+    .trim()
+    .isLength({ min: 6 })
+    .withMessage('Password should be at least 6 characters long')
+    .matches(/[a-zA-Z]/)
+    .withMessage('Password should contain at least one letter')
+    .matches(/[0-9]/)
+    .withMessage('Password should contain at least one digit')
 ]
 
 

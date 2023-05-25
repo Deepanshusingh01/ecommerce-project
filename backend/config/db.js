@@ -10,7 +10,7 @@ const sequelize = new Sequelize(
     Config.password,
     // {
     //     ...Config,
-    //     logging:false
+    //     logging: false, 
     // }
     {
         host:Config.host,
