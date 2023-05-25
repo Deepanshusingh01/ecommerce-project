@@ -13,6 +13,7 @@ const registerUser = [
     .trim()
     .isEmail()
     .withMessage('Email is not valid')
+    .normalizeEmail()
     .custom(isValidEmail),
     body('password')
     .notEmpty()
@@ -20,6 +21,7 @@ const registerUser = [
     .trim()
     .isLength({min:6})
     .withMessage('Password should be at least 6 characters long')
+    .isStrongPassword()
     .custom(isValidPassword),
     body('phoneNo')
     .notEmpty()
@@ -36,7 +38,8 @@ const login = [
     .withMessage('Email is required')
     .trim()
     .isEmail()
-    .withMessage('Invalid email address'),
+    .withMessage('Invalid email address')
+    .normalizeEmail(),
     body('password')
     .notEmpty()
     .withMessage('Password is required')
