@@ -9,6 +9,9 @@ const userService = require("../services/userServices");
 const { nodeMailer } = require("../utils/nodeMailer");
 const moment = require("moment");
 const { StatusCodes } = require("http-status-codes");
+// const nodeCache = require("node-cache");
+// const myCache = new nodeCache({ stdTTL: 20 });
+// const cacheKey = "ecommerceProject";
 
 exports.signup = async (req, res) => {
   try {
@@ -64,12 +67,10 @@ exports.signin = async (req, res) => {
         };
 
         session.views = (session.views || 0) + 1;
-        return res
-          .status(StatusCodes.OK)
-          .send({
-            response,
-            mesg: `You have visited this page ${session.views} times`,
-          });
+        return res.status(StatusCodes.OK).send({
+          response,
+          mesg: `You have visited this page ${session.views} times`,
+        });
       } else {
         return res.status(StatusCodes.BAD_REQUEST).send({
           mesg: "Email or Password may be wrong",
@@ -88,17 +89,13 @@ exports.signin = async (req, res) => {
   }
 };
 
-let cachedData = [];
+
 exports.findAll = async (req, res) => {
   try {
-    if (cachedData.length !== 0) {
-      return res.send(cachedData);
-    }
 
-    const users = await userService.findAllUser();
-    cachedData = users.map((user) => user.toJSON());
-    return res.status(StatusCodes.OK).send(cachedData);
 
+    const users = await userService.findAllUser({ attributes: ['userId', 'name', 'email', 'phoneNo', 'createdAt', 'updatedAt'] });
+    return res.status(StatusCodes.OK).send(users);
     //------------------- pagination-----------------------------
     // let { page, limit, search } = req.query;
     // limit = parseInt(limit) || 10;
@@ -199,13 +196,11 @@ exports.forgetPassword = async (req, res) => {
       otp,
     });
     // nodeMailer(email,otp)
-    return res
-      .status(StatusCodes.OK)
-      .send({
-        mesg: `Use : ${
-          reset.otp
-        } OTP to generate new password sent to this email:${email} using this URl :${"http://localhost:8080/user/reset-password/your-otp/your-userId"} expiresIn : 4 min`,
-      });
+    return res.status(StatusCodes.OK).send({
+      mesg: `Use : ${
+        reset.otp
+      } OTP to generate new password sent to this email:${email} using this URl :${"http://localhost:8080/user/reset-password/your-otp/your-userId"} expiresIn : 4 min`,
+    });
   }
 };
 
