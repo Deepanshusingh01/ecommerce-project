@@ -15,7 +15,7 @@ const User = sequelize.define('user', {
   email: {
     type: Sequelize.STRING(50),
     allowNull: false,
-    index: true
+    unique: true
   },
   password: {
     type: Sequelize.STRING,
@@ -23,7 +23,7 @@ const User = sequelize.define('user', {
   },
   phoneNo: {
     type: Sequelize.BIGINT,
-    allowNull: false,
+    allowNull: false
   },
   createdAt: {
     type: Sequelize.DATE,

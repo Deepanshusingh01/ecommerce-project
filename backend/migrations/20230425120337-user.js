@@ -11,7 +11,7 @@ module.exports = {
       },
       name : {
           type : Sequelize.STRING(20),
-          allowNull : false
+          allowNull : false,
       },
       email : {
           type : Sequelize.STRING(50),
@@ -20,16 +20,16 @@ module.exports = {
       },
       phoneNo : {
         type : Sequelize.BIGINT,
-        allowNull:false
+        allowNull:false,
       },
       password : {
           type : Sequelize.STRING,
-          allowNull : false
+          allowNull : false,
       },
       createdAt : {
           type : Sequelize.DATE,
           allowNull : false,
-          defaultValue : Sequelize.NOW
+          defaultValue : Sequelize.NOW,
       },
       updatedAt : {
         type : Sequelize.DATE,

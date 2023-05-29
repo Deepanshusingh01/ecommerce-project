@@ -11,9 +11,9 @@ const registerUser = [
     .notEmpty()
     .withMessage('Email is required')
     .trim()
+    .normalizeEmail()
     .isEmail()
     .withMessage('Email is not valid')
-    .normalizeEmail()
     .custom(isValidEmail),
     body('password')
     .notEmpty()
@@ -38,8 +38,7 @@ const login = [
     .withMessage('Email is required')
     .trim()
     .isEmail()
-    .withMessage('Invalid email address')
-    .normalizeEmail(),
+    .withMessage('Invalid email address'),
     body('password')
     .notEmpty()
     .withMessage('Password is required')
