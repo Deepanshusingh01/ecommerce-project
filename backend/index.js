@@ -1,4 +1,5 @@
 const express = require('express');
+const compression = require('compression')
 const app = express();
 const serverConfig = require('./config/server.config');
 const sequelize = require('./config/db');
@@ -7,6 +8,7 @@ const session = require('express-session');
 const sequelizeStore = require('connect-session-sequelize')(session.Store);
 const path = require('path');
 app.use(cors());
+app.use(compression())
 
 app.use(
   session({
@@ -20,7 +22,6 @@ app.use(
     cookie: { maxAge: 24 * 60 * 60 * 1000 },
   })
 );
-
 
 const orderController = require('./controllers/order.controller');
 app.post('/stripe/webhook', express.raw({ type: 'application/json' }), orderController.stripeWebHook);
@@ -43,8 +44,6 @@ const { routeNotFound } = require('./middleware')
 
 app.use(apiRoutes)
 app.use(routeNotFound)
-
-
 
 app.listen(serverConfig.PORT, () => {
   console.log('Server started at Port :', serverConfig.PORT);
