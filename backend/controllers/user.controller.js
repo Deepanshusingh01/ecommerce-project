@@ -12,7 +12,7 @@ const { StatusCodes } = require("http-status-codes");
 // const nodeCache = require("node-cache");
 // const myCache = new nodeCache({ stdTTL: 20 });
 // const cacheKey = "ecommerceProject";
-
+let cachedData = []
 exports.signup = async (req, res) => {
   try {
     const { name, email, phoneNo, password } = req.body;
@@ -24,7 +24,7 @@ exports.signup = async (req, res) => {
       phoneNo,
       password: hashpassword,
     });
-
+    cachedData.push(user)
     const response = {
       userId: user.userId,
       name: user.name,
@@ -90,11 +90,16 @@ exports.signin = async (req, res) => {
 };
 
 
+
 exports.findAll = async (req, res) => {
   try {
 
 
+    if(cachedData.length){
+        return res.status(StatusCodes.OK).send(cachedData)
+    }
     const users = await userService.findAllUser({ attributes: ['userId', 'name', 'email', 'phoneNo', 'createdAt', 'updatedAt'] });
+    cachedData = users
     return res.status(StatusCodes.OK).send(users);
     //------------------- pagination-----------------------------
     // let { page, limit, search } = req.query;
